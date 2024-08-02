@@ -1,0 +1,104 @@
+.cart-style {
+    .overall {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .box1 {
+        width: 70vw;
+    }
+
+    .box2 {
+        width: 30vw;
+        position: relative;
+
+    }
+
+    .card-box {
+        position: fixed;
+        background-color: rgb(255, 255, 255);
+        width: 30vw;
+        height: 100vh;
+        padding: 20px 20px;
+        border-radius: 10px;
+        overflow: auto;
+    }
+
+    .product-card {
+        height: 180px;
+        display: flex;
+        padding: 10px;
+
+    }
+
+    .product-card .img-box {
+        width: 40%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .product-card .img-box img {
+        // width: 100%;
+        height: 100%;
+        background-size: cover;
+        object-fit: cover;
+    }
+
+    .product-card .content-box {
+        width: 60%;
+        display: flex;
+        align-items: center;
+    }
+    .submit-btn{
+        border: none;
+        background-color: green;
+        padding: 8px 30px;
+        color: white;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 800px) {
+    .cart-style {
+   
+        font-size: 15px !important;
+    
+        .box1 {
+            width: 100%;
+        }
+    
+        .box2 {
+            display: none;    
+        }
+        .product-card {
+            height: 140px;
+            display: flex;
+            margin: 20px;
+        }
+        .product-card .img-box {
+            width: 40%;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+        }
+        .product-card .img-box img {
+            height: 100%;
+            background-size: cover;
+            object-fit: cover;
+        }
+        .product-card .content-box {
+            width: 60%;
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .submit-btn{
+            border: none;
+            background-color: green;
+            padding: 8px 30px;
+            color: white;
+            border-radius: 20px;
+        }
+    }
+}

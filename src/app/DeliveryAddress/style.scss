@@ -1,0 +1,18 @@
+.card-fixed{
+    position: fixed;
+    background-color: rgb(255, 255, 255);
+    // width: 30vw;
+    height: 100vh;
+    padding: 20px 20px;
+    border-radius: 10px;
+    overflow: auto;
+    right: 0;
+}
+
+
+@media (max-width: 800px) {
+    .card-fixed{
+        position: static;
+        height: auto;
+    }
+}
