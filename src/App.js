@@ -13,7 +13,7 @@ function AppContent() {
   console.log("sadddddddd============= ", currentRoute);
 
   return (
-    <div style={{ overflowX: "hidden", marginTop: currentRoute !== "/" ? 90 : 130 }} className='sm-margin-top'>
+    <div style={{ overflow: "hidden", marginTop: currentRoute !== "/" ? 90 : 130 }} className='sm-margin-top'>
       <Routes>
         {
           RouteList.map(({ path, component: Component }, index) => {

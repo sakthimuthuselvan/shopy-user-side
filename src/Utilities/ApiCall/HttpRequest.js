@@ -6,7 +6,7 @@ const HttpRequest = async ({ method, url, encrypted }) => {
     const token = localStorage.getItem('Auth');
     const response = await axios({
       method: method,
-      url: `http://192.168.1.9:4000/${url}`, // Assuming you want to use the base URL
+      url: `http://127.0.0.1:4000/${url}`, // Assuming you want to use the base URL
       data: encrypted,
       headers: {
         Authorization: `Bearer ${token}`,

@@ -289,14 +289,13 @@ function OverView() {
         </div>
       </div>
 
-      <div className=' px-3 mt-3'>
-        {/* <h3 className='title pt-3 pb-2'>Trending Cloths</h3> */}
+      {/* <div className=' px-3 mt-3'>
         <Typography variant='h6' className='fw-bold pt-3 pb-2'>Trending Cloths</Typography>
 
         <div>
           <Suspense fallback={<h1> </h1>}><ProductListCom productLists={productLists} /></Suspense>
         </div>
-      </div>
+      </div> */}
 
 
       {/* <GoogleMap /> */}

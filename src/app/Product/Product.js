@@ -165,7 +165,7 @@ const Product = (props) => {
     <div className={productDetails.total_quantity !== 0 ? "pointer" : 'overall-out-off-stock'} >
       <div className='img-card p-0 pt-2'>
         <div  style={{display:"flex",flexDirection:"column",alignContent:"space-around"}} className=''>
-          <div onClick={() => productDetailBtnClick(productDetails)} className='p-3 pt-1 h-25'>
+          <div  onClick={() => productDetailBtnClick(productDetails)} className='p-3 pt-1 h-25'>
             <img src={productDetails.cover_image} alt='product' className='w-100' />
           </div>
 
