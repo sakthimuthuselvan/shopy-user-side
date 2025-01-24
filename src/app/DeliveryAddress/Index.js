@@ -6,9 +6,12 @@ import pinCodeList from "../../JsonList/StateList/pincode.json";
 import { useSelector } from 'react-redux';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { CgNotes } from 'react-icons/cg';
+import { useTheme } from '@emotion/react';
 
 console.log("StateList ", stateList);
 function Index() {
+  const theme = useTheme();  // Access the current theme
+  const primaryColor = theme.palette.primary.main;  // Get the primary color
   const gloablState = useSelector((state)=> state)
   const [overallList] =useState(gloablState.addCartProduct)
   console.log("overallList ",overallList);
@@ -146,7 +149,7 @@ function Index() {
         </div>
         <div className='d-flex justify-content-between'>
           <p className='m-0'><TbTruckDelivery className='me-2' />Delivery Charge </p>
-          <p className='fw-bold text-success'>Free</p>
+          <p style={{color: primaryColor}} className='fw-bold'>Free</p>
         </div>
         <div className='d-flex justify-content-between'>
           <p className='m-0 fw-bold'>Grant Total </p>
@@ -296,7 +299,15 @@ function Index() {
               </div>
 
               <div className='d-flex justify-content-end mt-3'>
-                <Button type='submit' variant='contained' color='success' onClick={() => paySubmitBtnClick()}>proceed to pay</Button>
+                <Button type='submit' variant='contained'
+                  sx={{
+                    backgroundColor: 'primary.main', // Use primary color for background
+                    color: 'white', // Text color (optional)
+                    '&:hover': {
+                      backgroundColor: 'primary.dark', // Darker shade of primary color on hover
+                    },
+                  }}
+                 onClick={() => paySubmitBtnClick()}>proceed to pay</Button>
               </div>
 
             </div>

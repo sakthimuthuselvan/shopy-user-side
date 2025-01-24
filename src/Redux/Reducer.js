@@ -79,6 +79,8 @@ const Reducer = (state = initialState, action) => {
     case "Auth":
       return { ...state, auth: true }
     case "open_dialog":
+      console.log("========= ", action.payload);
+      
       return { ...state, openPopup: action.payload }
     case "dont_close":
       return { ...state, dontClose: action.payload }

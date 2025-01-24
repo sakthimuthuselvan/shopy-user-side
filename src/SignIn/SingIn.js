@@ -1,4 +1,4 @@
-import { Button, IconButton, InputLabel, TextField, } from '@mui/material';
+import { Button, IconButton, InputLabel, TextField, Typography, useTheme, } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import HttpRequest from '../Utilities/ApiCall/HttpRequest';
@@ -21,12 +21,14 @@ import Slide from '@mui/material/Slide';
 import SignUp from '../SignUp/SignUp';
 import OtpCom from '../OtpCom/OtpCom';
 import ResetPassword from "../ResetPssword/ResetPassword"
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 import { encrypt } from '../Utilities/Util';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 function SignIn() {
+    const theme = useTheme();  // Access the current theme
+    const primaryColor = theme.palette.primary.main;  // Get the primary color
     const [state, setState] = useState({
         email: "",
         password: "",
@@ -44,50 +46,52 @@ function SignIn() {
 
     })
     const dispatch = useDispatch();
-    const globalState = useSelector((state)=> state)
+    const globalState = useSelector((state) => state)
     const { email, password, emailErr, signUpCheck, dontClose, openDialog, passwordErr, errMsg, showPassword, showLoader, openSnackbar, snackType, snackMessage } = state;
 
-useEffect(()=>{
-    setState((pre) => {
-        return {
-            ...pre,
-            openDialog: globalState.openPopup,
-            signUpCheck: 1,
-            email: "",
-            password: "",
-        }
-    })
-},[globalState.openPopup])
-
-
-useEffect(()=>{
-        setState((pre) => {
-            return {
-                ...pre,
-                dontClose: globalState.dontClose
-            }
-        })
-      
-},[globalState.dontClose])
-
     useEffect(() => {
+        console.log("///////////////////////////");
+
         setState((pre) => {
             return {
                 ...pre,
-                openDialog: globalState.openPopup
+                openDialog: true,
+                signUpCheck: 1,
+                email: "",
+                password: "",
             }
         })
     }, [])
- 
+
+
+    // useEffect(()=>{
+    //         setState((pre) => {
+    //             return {
+    //                 ...pre,
+    //                 dontClose: globalState.dontClose
+    //             }
+    //         })
+
+    // },[globalState.dontClose])
+
+    // useEffect(() => {
+    //     setState((pre) => {
+    //         return {
+    //             ...pre,
+    //             openDialog: globalState.openPopup
+    //         }
+    //     })
+    // }, [])
+
 
     const handleClose = () => {
-        setState((pre)=>{
-            return{
+        setState((pre) => {
+            return {
                 ...pre,
                 openDialog: false
             }
         })
-        dispatch({type:"open_dialog",payload:false})
+        dispatch({ type: "open_dialog", payload: false })
     };
 
 
@@ -120,24 +124,24 @@ useEffect(()=>{
             }));
             document.getElementById("password").focus()
         } else {
-                logInApiCall()
+            logInApiCall()
         }
     }
 
 
 
     const logInApiCall = () => {
-        setState((pre)=>({...pre,showLoader: true}))
+        setState((pre) => ({ ...pre, showLoader: true }))
         const method = "Post";
         const url = "shopy/user/login";
         const data = {
             "email": email,
             "password": password
         }
-        const encrypted ={
-            data : encrypt(JSON.stringify(data))
-        } 
-console.log(encrypted);
+        const encrypted = {
+            data: encrypt(JSON.stringify(data))
+        }
+        console.log(encrypted);
         const response = HttpRequest({ method, url, encrypted });
         response
             .then((res) => {
@@ -147,7 +151,7 @@ console.log(encrypted);
                 setState({
                     ...state,
                     showLoader: false,
-                    openDialog:false,
+                    openDialog: false,
                     openSnackbar: true,
                     snackType: "success",
                     snackMessage: message
@@ -200,101 +204,118 @@ console.log(encrypted);
         })
     }
 
-    const resetPasswordClick = () => {
-        setState((pre) => {
-            return {
-                ...pre,
-                signUpCheck: 4
-            }
-        })
+    const resetPasswordClick = (type) => {
+        if(type === "back"){
+            setState((pre) => {
+                return {
+                    ...pre,
+                    signUpCheck: 1
+                }
+            })
+        }else{
+            setState((pre) => {
+                return {
+                    ...pre,
+                    signUpCheck: 4
+                }
+            })
+        }
+
     }
 
- 
+    const logInHtmlBuild = () => {
+        return (
+            <div className='d-flex justify-content-center mx-3 ml-4'>
+                <div className='text-center mt-4 mx-3'>
+                    <Typography className='fw-bold' variant='h5'>LogIn</Typography>
+                    <Typography>LogIn into the account</Typography>
+                    <div className='pt-4'>
+                        <TextField
+                            id='email'
+                            name="email"
+                            value={email}
+                            label="Email"
+                            type='email'
+                            variant="outlined"
+                            className='my-2 w-100'
+                            onChange={(e) => handleInputChange(e, "email", "emailErr")}
+                            error={emailErr}
+                            helperText={emailErr ? errMsg : null}
+                        />
+                        <FormControl className='my-2 w-100' variant="outlined" error={passwordErr}>
+                            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+                            <OutlinedInput
+                                id="password"
+                                type={showPassword ? 'text' : 'password'}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Password"
+                                onChange={(e) => handleInputChange(e, "password", "passwordErr")}
+                                error={passwordErr}
+                                helperText={passwordErr ? errMsg : null}
+                            />
+                        </FormControl>
+                    </div>
+                    <div>
+                        <p className='text-start pt-4'><span className='pointer' style={{ color: primaryColor }} onClick={() => forgotPassFun()}>Forgot Password</span></p>
+                    </div>
+                    <div className='mt-4 py-3 mt-4'>
+                        <Button variant="contained"
+                            sx={{ backgroundColor: primaryColor }}
+                            className='w-100 mt-3 py-2'
+                            onClick={() => submitFun()}
+                        >Submit</Button>
+                    </div>
+                    <div className='pb-2 pt-1'>Don't have an account <span style={{ color: primaryColor }} className='pointer' onClick={() => goSignUp()}>SignUp</span></div>
+                </div>
+            </div>
+        )
+    }
+
     const size = WindowWidth()
+    console.log("openDialog ", openDialog)
     return (
         <div>
             <Loader open={showLoader} />
-            <MySnackbar open={openSnackbar} type={snackType} variant={"filled"} message={snackMessage} duration={3000} onClose={()=>setState((pre)=>({...pre,openSnackbar:false}))}/>
+            <MySnackbar open={openSnackbar} type={snackType} variant={"filled"} message={snackMessage} duration={3000} onClose={() => setState((pre) => ({ ...pre, openSnackbar: false }))} />
             <div className={size === "lg" ? 'overall-signin rounded' : "overall-small"}>
                 <div className={`p-0 w-100 d-flex ${size === "lg" ? "jr-card jr-card-style" : ""}`}>
                     <Dialog
                         open={openDialog}
                         TransitionComponent={Transition}
                         keepMounted
-                        onClose={dontClose ? null : handleClose}
+                        maxWidth={'xs'}
+                        fullWidth
+                        // onClose={dontClose ? null : handleClose}
                         aria-describedby="alert-dialog-slide-description"
                     >
                         <DialogContent className='p-1'>
                             <div>
                                 {signUpCheck === 1 ?
-                                    <div className='d-flex justify-content-center mx-3 ml-4'>
-                                        <div className='text-center mt-4 mx-3'>
-                                            <h2>LogIn</h2>
-                                            <p>LogIn into the account</p>
-                                            <div className='pt-4'>
-                                                <TextField
-                                                    id='email'
-                                                    name="email"
-                                                    value={email}
-                                                    label="Email"
-                                                    type='email'
-                                                    variant="outlined"
-                                                    className='my-2 w-100'
-                                                    onChange={(e) => handleInputChange(e, "email", "emailErr")}
-                                                    error={emailErr}
-                                                    helperText={emailErr ? errMsg : null}
-                                                />
-                                                <FormControl className='my-2 w-100' variant="outlined" error={passwordErr}>
-                                                    <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-                                                    <OutlinedInput
-                                                        id="password"
-                                                        type={showPassword ? 'text' : 'password'}
-                                                        endAdornment={
-                                                            <InputAdornment position="end">
-                                                                <IconButton
-                                                                    aria-label="toggle password visibility"
-                                                                    onClick={handleClickShowPassword}
-                                                                    edge="end"
-                                                                >
-                                                                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                                                                </IconButton>
-                                                            </InputAdornment>
-                                                        }
-                                                        label="Password"
-                                                        onChange={(e) => handleInputChange(e, "password", "passwordErr")}
-                                                        error={passwordErr}
-                                                        helperText={passwordErr ? errMsg : null}
-                                                    />
-                                                </FormControl>
-                                            </div>
-                                            <div>
-                                                <p className='text-start pt-4 text-info '><span className='pointer' onClick={() => forgotPassFun()}>Forgot Password</span></p>
-                                            </div>
-                                            <div className='mt-4 py-3 mt-4'>
-                                                <Button variant="contained"
-                                                    className='w-100 bg-primary mt-3 py-2'
-                                                    onClick={() => submitFun()}
-                                                >Submit</Button>
-                                            </div>
-                                            <div className='pb-2 pt-1'>Don't have an account <span className='text-info pointer' onClick={() => goSignUp()}>SignUp</span></div>
-                                        </div>
-                                    </div> :
+                                    logInHtmlBuild()
+                                    :
                                     signUpCheck === 2 ?
                                         <SignUp goLogInFun={goLogInFun} />
                                         :
                                         signUpCheck === 3 ?
                                             <OtpCom resetPasswordClick={resetPasswordClick} />
                                             :
-                                            <ResetPassword goLogInFun={goLogInFun}/>
+                                            <ResetPassword goLogInFun={goLogInFun} />
                                 }
                             </div>
                         </DialogContent>
                         <DialogActions>
                         </DialogActions>
                     </Dialog>
-
-
-
                 </div>
             </div>
         </div>

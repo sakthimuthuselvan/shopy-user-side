@@ -29,7 +29,7 @@ const Index = ({ categoryList }) => {
     }
     return (
         <div className='mt-3'>
-            <Typography variant='h6' className='fw-bold pt-3 pb-2'>Explore By Categories</Typography>
+            <Typography variant='h5' className='fw-bold pt-3 pb-2'>Explore By Categories</Typography>
 
             {overallCategory.length > 0 ?
                 <div className='row p-0'>
@@ -38,7 +38,7 @@ const Index = ({ categoryList }) => {
                             <div onClick={() => categorySelectFun(item)} className='category col-lg-2 col-md-3 col-sm-4 col-4 mb-2 pointer'>
                                 <div> <img src={item.category_img} className=' w-100' alt='Redundant' /></div>
                                 <div>
-                                    <h4 className='text-center mt-2'>{item.name}</h4>
+                                    <h6 className='text-center fw-bold mt-2'>{item.name}</h6>
                                 </div>
                             </div>
 

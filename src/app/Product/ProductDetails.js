@@ -8,7 +8,11 @@ import { Button, Skeleton } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { useTheme } from '@emotion/react';
 const ProductDetails = () => {
+  const theme = useTheme();  // Access the current theme
+  const primaryColor = theme.palette.primary.main;
+
   const base_url = process.env.REACT_APP_BASE_URL;
 
   const { id } = useParams(); // Accessing the dynamic parameter ":id"
@@ -193,15 +197,29 @@ initialFun()
               <div className='mt-4'>
                 {overallDetails && overallDetails.add_cart ?
                   <Button
+                  sx={{
+                    backgroundColor: 'secondary.main', // Use primary color for background
+                    color: 'white', // Text color (optional)
+                    '&:hover': {
+                      backgroundColor: 'secondary.dark', // Darker shade of primary color on hover
+                    },
+                  }}
                     variant='contained'
-                    className='bg-secondary text-black bold'
+                    className='text-black bold'
                     size='small'
                     onClick={() => cancelBtnClick(overallDetails)}
                   ><span className='bold'>Cancel</span></Button>
                   :
                   <Button
+                    sx={{
+                      backgroundColor: 'primary.main', // Use primary color for background
+                      color: 'white', // Text color (optional)
+                      '&:hover': {
+                        backgroundColor: 'primary.dark', // Darker shade of primary color on hover
+                      },
+                    }}
                     variant='contained'
-                    className='bg-success py-2 px-5'
+                    className='py-2 px-5'
                     size='small'
                     onClick={() => addBtnClick(overallDetails)}
                   ><span className='bold'>Add</span></Button>

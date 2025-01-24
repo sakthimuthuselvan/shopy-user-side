@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, TextField } from '@mui/material'
+import { Button, TextField, Typography, useTheme } from '@mui/material'
 import "./otpstyle.css";
 import { useDispatch } from 'react-redux';
 import HttpRequest from '../Utilities/ApiCall/HttpRequest';
@@ -8,6 +8,8 @@ import MySnackbar from '../AlertShow/Alert';
 import { encrypt } from '../Utilities/Util';
 
 const OtpCom = ({ resetPasswordClick }) => {
+        const theme = useTheme();  // Access the current theme
+        const primaryColor = theme.palette.primary.main;  // Get the primary color
     const [state, setState] = useState({
         value: '', otp1: "", otp2: "", otp3: "", otp4: "", otp5: "", otp6: "", disable: true,
         email: "", emailErr: false,
@@ -85,8 +87,6 @@ const OtpCom = ({ resetPasswordClick }) => {
                 ...pre,
                 otpShow: true
             }))
-            dispatch({ type: "dont_close", payload: true })
-
             otpSendApiCall()
         }
     }
@@ -112,7 +112,6 @@ const OtpCom = ({ resetPasswordClick }) => {
                     snackType: "success",
                     snackMessage: message
                 }))
-                dispatch({ type: "dont_close", payload: true })
             }).catch((err) => {
 
                 setState((pre) => ({
@@ -159,7 +158,6 @@ const OtpCom = ({ resetPasswordClick }) => {
                 snackType: "success",
                 snackMessage: response.response_message
             }))
-            dispatch({ type: "email", payload: email })
             resetPasswordClick()
 
         } catch (error) {
@@ -173,12 +171,15 @@ const OtpCom = ({ resetPasswordClick }) => {
         }
     };
 
+    const goSignInFun=()=>{
+        resetPasswordClick("back")
+    }
     return (
         <div>
             <Loader open={showLoader} />
             <MySnackbar open={openSnackbar} type={snackType} variant={"filled"} message={snackMessage} duration={1000} onClose={() => setState((pre) => ({ ...pre, openSnackbar: false }))} />
-            <div>
-                <div className='w-100 d-flex justify-content-center'>
+            <div className='mx-3'>
+                <div className=''>
                     <div className={"pb-3"}>
                         <div>
                             {!otpShow ?
@@ -206,10 +207,13 @@ const OtpCom = ({ resetPasswordClick }) => {
 
                                                 <div className='submit-btn'>
                                                     <Button variant="contained"
-                                                        className='w-100 bg-primary mt-3 py-2'
+                                                    sx={{backgroundColor: primaryColor}}
+                                                        className='w-100 mt-3 py-2'
                                                         type='submit'
                                                     >Next</Button>
                                                 </div>
+                                                <div className='pb-2 pt-1'>Go to <span style={{ color: primaryColor }} className='pointer' onClick={() => goSignInFun()}>SignIn</span></div>
+
                                             </form>
                                         </div>
                                         {/* </div> */}
@@ -217,7 +221,7 @@ const OtpCom = ({ resetPasswordClick }) => {
                                 </div>
                                 :
                                 <div className='text-center mt-4 mx-3'>
-                                    <h2 className='pt-3'>Verify OTP </h2>
+                                    <Typography className='pt-2 fw-bold' variant='h5'>Verify OTP</Typography>
                                     <p className='pt-3'>An OTP has been sent to your email. Enter the OTP to reset your password.</p>
                                     <div className=''>
                                         <form onSubmit={handleSubmit}>
@@ -292,11 +296,12 @@ const OtpCom = ({ resetPasswordClick }) => {
                                             <small className='text-danger mt-2'>{otpErr ? "These fiels are required" : null}</small>
                                             <div className='submit-btn'>
                                                 <Button variant="contained"
-                                                    className='w-100 bg-primary mt-3 py-2'
+                                                sx={{backgroundColor: primaryColor}}
+                                                    className='w-100 mt-3 py-2'
                                                     onClick={() => verifyOTPFun()}
                                                 >Verify OTP</Button>
                                             </div>
-                                            <div className='pb-2 pt-2 mt-1'><span className='text-info pointer' onClick={() => otpSendApiCall()}>Resend OTP</span></div>
+                                            <div className='pb-2 pt-2 mt-1'><span className=' pointer' style={{color: primaryColor}} onClick={() => otpSendApiCall()}>Resend OTP</span></div>
 
                                         </form>
                                     </div>

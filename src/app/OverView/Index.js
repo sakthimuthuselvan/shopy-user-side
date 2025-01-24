@@ -89,33 +89,11 @@ function OverView() {
     const data = {}
     try {
       const response = await HttpRequest({ method, url, data });
-
-      let stored = localStorage.getItem("WISH_LIST")
-      stored = stored ? JSON.parse(stored) : []
       const datas = response.response_data ? response.response_data : []
-      // const framing = datas.map((item) => {
-      //   let check = stored.every((data) => data === item._id)
-      //   return { ...item, "is_whishList": check ? 1 : 0 }
-      // })
-
-      console.log("datasdatas ",datas);
-     const framing = datas.map(item => ({
-        ...item,
-        "is_whishList": stored && stored.length > 0 && stored.some(data => data === item._id) ? 1 : 0
-    }));
-    
-      // }else{
-      //   overall = datas.map((item)=> ({...item,"is_whishList": 0}))
-      // }
-    
-      dispatch({ type: "PRODUCTS_LIST", payload:  framing})
-
 
       setState((state) => ({
         ...state,
-        productLists:  framing,
-        // addvertismentData: addvertismentData,
-        // categoryList: categoryList,
+        productLists:  datas,
         skeletonShow: false
       }))
     } catch (error) {
@@ -124,118 +102,12 @@ function OverView() {
         openSnakbar: true,
         openSnakbarType: "error",
         openSnakbarMsg: error.response_message ? error.response_message : "Something went wrong"
-
       }))
     }
 
   }
   const sliderListApiCall = async () => {
-    //     const data = [
-    //   {
-    //     product_id: "11111",
-    //     product_name: "Onion",
-    //     product_type: "vegitable",
-    //     messure: "kg",
-    //     size: 1,
-    //     total_quantity: 3,
-    //     old_price: 70,
-    //     price: 50,
-    //     is_whishList: 0,
-    //     product_img: product3,
-    //     is_offer: 0,
-    //     offer_percentage: 40,
-    //     add_cart: 0,
-    //     currency: "₹",
-    //   },
-    //   {
-    //     product_id: "11101",
-    //     product_name: "Onion",
-    //     product_type: "vegitable",
-    //     messure: "kg",
-    //     size: 1,
-    //     total_quantity: 3,
-    //     old_price: 70,
-    //     price: 50,
-    //     is_whishList: 0,
-    //     product_img: product1,
-    //     is_offer: 0,
-    //     offer_percentage: 40,
-    //     add_cart: 0,
-    //     currency: "₹",
-    //   },
-    //   {
-    //     product_id: "11121",
-    //     product_name: "Onions",
-    //     product_type: "vegitable",
-    //     messure: "kg",
-    //     size: 1,
-    //     total_quantity: 0,
-    //     old_price: 70,
-    //     price: 50,
-    //     is_whishList: 0,
-    //     product_img: product1,
-    //     is_offer: 1,
-    //     offer_percentage: 40,
-    //     add_cart: 0,
-    //     currency: "₹",
-    //   }
-    // ]
-    // const sliderOverall = [
-    //   {
-    //     silder_id: "11111",
-    //     sm_img: mobileimage1,
-    //     lg_img: image1
-    //   },
-    //   {
-    //     silder_id: "11111",
-    //     sm_img: mobileimage2,
-    //     lg_img: image2
-    //   }
-
-    // ]
-
-    // const addvertismentData = [
-    //   { image: add1, path: "/" },
-    //   { image: add2, path: "/" },
-    //   { image: add1, path: "/" },
-    //   { image: add2, path: "/" },
-    // ]
-
-    // const categoryList = [
-    //   {
-    //     category_id: "1111111",
-    //     category_name: "Wheat",
-    //     cate_img: cate1,
-    //   },
-    //   {
-    //     category_id: "1111111",
-    //     category_name: "Wheat",
-    //     cate_img: cate1,
-    //   },
-    //   {
-    //     category_id: "1111111",
-    //     category_name: "Wheat",
-    //     cate_img: cate1,
-    //   },
-    //   {
-    //     category_id: "1111111",
-    //     category_name: "Wheat",
-    //     cate_img: cate1,
-    //   },
-    //   {
-    //     category_id: "1111111",
-    //     category_name: "Wheat",
-    //     cate_img: cate1,
-    //   },
-    // ]
-    // setState((state) => ({
-    //   ...state,
-    //   productLists: data,
-    //   sliderOverall: sliderOverall,
-    //   addvertismentData: addvertismentData,
-    //   categoryList: categoryList,
-    //   skeletonShow: false
-    // }))
+ 
     setState((state) => ({ ...state, skeletonShow: true }))
     const method = "GET";
     const url = "slider/get/slider/banner";
