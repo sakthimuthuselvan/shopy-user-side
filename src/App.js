@@ -10,8 +10,6 @@ import { useCurrentRoute } from './Utilities/PathFind'; // Adjust the path as ne
 
 function AppContent() {
   const currentRoute = useCurrentRoute();
-  console.log("sadddddddd============= ", currentRoute);
-
   return (
     <div style={{ overflow: "hidden", marginTop: currentRoute !== "/" ? 90 : 130 }} className='sm-margin-top'>
       <Routes>

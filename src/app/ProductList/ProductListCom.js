@@ -50,8 +50,48 @@ console.log("globalState.overallProductsglobalState.overallProducts ",globalStat
         <div>
             {productList.length > 0 ?
 
-                <div className='row p-0'>
+                <div style={{overflowY:"hidden"}} className=' d-flex flex-row overflow-x-auto p-0'>
                     {productList.map((item) => {
+                        return (
+                            <div className=' col-lg-2 col-md-3 col-sm-6 col-6 mb-2 px-1'>
+
+                                <Product
+                                    productDetail={item}
+                                    product_name={item.product_name}
+                                    is_whishList={item.is_whishList}
+                                    product_img={item.cover_image}
+                                    messure={item.messure}
+                                    offer_percentage={item.offer_percentage}
+                                    is_offer={item.is_offer}
+                                    price={item.price}
+                                    setStateAgainFun={setStateAgainFun}
+                                />
+                                <div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                     {productList.map((item) => {
+                        return (
+                            <div className=' col-lg-2 col-md-3 col-sm-6 col-6 mb-2 px-1'>
+
+                                <Product
+                                    productDetail={item}
+                                    product_name={item.product_name}
+                                    is_whishList={item.is_whishList}
+                                    product_img={item.cover_image}
+                                    messure={item.messure}
+                                    offer_percentage={item.offer_percentage}
+                                    is_offer={item.is_offer}
+                                    price={item.price}
+                                    setStateAgainFun={setStateAgainFun}
+                                />
+                                <div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                     {productList.map((item) => {
                         return (
                             <div className=' col-lg-2 col-md-3 col-sm-6 col-6 mb-2 px-1'>
 

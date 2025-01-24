@@ -6,7 +6,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useDispatch, useSelector, } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import proImg from "./imag.png"
+import { useTheme } from '@emotion/react';
 const Product = (props) => {
+  const theme = useTheme();  // Access the current theme
+  const primaryColor = theme.palette.primary.main;
   const { setStateAgainFun, productDetail } = props;
   const base_url = process.env.REACT_APP_BASE_URL;
   const cartName = "_CART_"
@@ -203,15 +206,17 @@ const Product = (props) => {
                   <div>
                     {productDetails.add_cart ?
                       <Button
+                      sx={{ backgroundColor: 'secondary.main', color: 'white', '&:hover': { backgroundColor: 'secondary.dark' } }}
                         variant='contained'
-                        className='bg-secondary text-black bold'
+                        // className='bg-secondary text-black bold'
                         size='small'
                         onClick={() => cancelBtnClick(productDetails)}
                       ><span className='bold'>Cancel</span></Button>
                       :
                       <Button
+                      sx={{ backgroundColor: 'primary.main', color: 'white', '&:hover': { backgroundColor: 'primary.dark' } }}
                         variant='contained'
-                        className='btn-primary'
+                        // className='btn-primary'
                         size='small'
                         onClick={() => addBtnClick(productDetails)}
                       ><span className='bold'>Add</span></Button>

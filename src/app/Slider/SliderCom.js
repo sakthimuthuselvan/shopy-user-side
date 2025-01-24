@@ -12,13 +12,13 @@ const SliderCom = ({ SliderData }) => {
     })
     const { sliderOverall, baseUrl } = state;
     const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        autoplay: true,
-        autoplaySpeed: 1500,
+        // dots: true,
+        // infinite: true,
+        // speed: 500,
+        // slidesToShow: 1,
+        // slidesToScroll: 1,
+        // autoplay: true,
+        // autoplaySpeed: 1500,
     };
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const SliderCom = ({ SliderData }) => {
                             {sliderOverall.length > 0 && sliderOverall.map((item) => {
                                 return (
                                     <div>
-                                        <img src={size === "sm" ? item.sm_img :  item.lg_img} className='w-100' />
+                                        <img src={size === "sm" ? item.sm_img :  item.lg_img} className='w-100'/>
                                     </div>
                                 )
                             })

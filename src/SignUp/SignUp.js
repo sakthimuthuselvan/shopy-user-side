@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, } from '@mui/material';
+import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography, useTheme, } from '@mui/material';
 import HttpRequest from "../Utilities/ApiCall/HttpRequest";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import "./signup.css"
 import WindowWidth from "../Utilities/index"
-import login from "../asset/login2.jpg"
 import Loader from '../Utilities/Loader/Loader';
 import MySnackbar from '../AlertShow/Alert';
 import { encrypt } from '../Utilities/Util';
 
 function SignUp({goLogInFun}) {
-
+    const theme = useTheme();  // Access the current theme
+    const primaryColor = theme.palette.primary.main;  // Get the primary color
     const [state, setState] = useState({
         name: "",
         email: "",
@@ -102,7 +102,7 @@ function SignUp({goLogInFun}) {
             "phone": Number(phone),
             "email": email,
             "password": password,
-            "user_type":"admin"
+            "user_type":"user"
         }
         const encrypted ={
             data : encrypt(JSON.stringify(data))
@@ -151,7 +151,7 @@ function SignUp({goLogInFun}) {
                         <div className={"w-100"}>
                             <div className='d-flex justify-content-center mx-3 ml-4'>
                                 <div className='text-center mt-4 mx-3'>
-                                    <h2>SignUp</h2>
+                                    <Typography variant="h5" className='fw-bold'>SignUp</Typography>
                                     <div className='pt-4'>
                                         <TextField
                                             id='name'
@@ -219,11 +219,12 @@ function SignUp({goLogInFun}) {
 
                                     <div className='mt-4 py-3 mt-4'>
                                         <Button variant="contained"
-                                            className='w-100 bg-primary mt-3 py-2'
+                                            sx={{backgroundColor: primaryColor}}
+                                            className='w-100 mt-3 py-2'
                                             onClick={() => submitFun()}
                                         >Submit</Button>
                                     </div>
-                                    <div className='pb-2 pt-1'>Go to <span className='text-info pointer' onClick={() => goLogIn()}>LogIn</span></div>
+                                    <div className='pb-2 pt-1'>Go to <span style={{color: primaryColor}} className='pointer' onClick={() => goLogIn()}>LogIn</span></div>
                                 </div>
                             </div>
                         </div>

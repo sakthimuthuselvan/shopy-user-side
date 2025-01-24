@@ -8,11 +8,14 @@ import { CgNotes } from "react-icons/cg";
 import { TbTruckDelivery } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTheme } from '@emotion/react';
 
 const Index = () => {
-  const gloablState = useSelector((state)=> state)
+  const theme = useTheme();  // Access the current theme
+  const primaryColor = theme.palette.primary.main;  // Get the primary color
+  const gloablState = useSelector((state) => state)
   const dispatch = useDispatch()
-  console.log("======== ",gloablState);
+  console.log("======== ", gloablState);
   const navigate = useNavigate()
   const [currency, setCurrency] = useState("₹")
   const [overallList, setOverallList] = useState(gloablState.addCartProduct)
@@ -122,19 +125,33 @@ const Index = () => {
 
                   {size !== "lg" ?
                     <div className='mb-4'>
-                      <ButtonGroup variant="outlined" size='small' color='success' aria-label="Basic button group">
-                        <Button className='bg-success fw-bold text-white border border-right border-white' onClick={() => dropBtnClick(item)}>-</Button>
-                        <Button className='bg-success fw-bold text-white  border border-right border-white'>{item.quantity}</Button>
-                        <Button className='bg-success fw-bold text-white  border border-right border-white' onClick={() => addMoreBtnClick(item)}>+</Button>
+                      <ButtonGroup
+                       sx={{
+                        backgroundColor: 'primary.main', // Use primary color for background
+                        color: 'white', // Text color (optional)
+                        '&:hover': {
+                          backgroundColor: 'primary.dark', // Darker shade of primary color on hover
+                        },
+                      }}
+                      variant="outlined" size='small'  aria-label="Basic button group">
+                        <Button color='primary' className=' fw-bold text-white border border-right border-white' onClick={() => dropBtnClick(item)}>-</Button>
+                        <Button className=' fw-bold text-white  border border-right border-white'>{item.quantity}</Button>
+                        <Button className=' fw-bold text-white  border border-right border-white' onClick={() => addMoreBtnClick(item)}>+</Button>
                       </ButtonGroup>
                     </div> : null}
                 </div>
                 {size === "lg" ?
                   <div className='col-4'>
-                    <ButtonGroup variant="outlined" size='large' color='success' aria-label="Basic button group">
-                      <Button className='bg-success fw-bold text-white border border-right border-white' onClick={() => dropBtnClick(item)}>-</Button>
-                      <Button className='bg-success fw-bold text-white  border border-right border-white'>{item.quantity}</Button>
-                      <Button className='bg-success fw-bold text-white  border border-right border-white' onClick={() => addMoreBtnClick(item)}>+</Button>
+                    <ButtonGroup sx={{
+                      backgroundColor: 'primary.main', // Use primary color for background
+                      color: 'white', // Text color (optional)
+                      '&:hover': {
+                        backgroundColor: 'primary.dark', // Darker shade of primary color on hover
+                      },
+                    }} variant="outlined" size='large' aria-label="Basic button group">
+                      <Button className=' fw-bold text-white border border-right border-white' onClick={() => dropBtnClick(item)}>-</Button>
+                      <Button className=' fw-bold text-white  border border-right border-white'>{item.quantity}</Button>
+                      <Button className=' fw-bold text-white  border border-right border-white' onClick={() => addMoreBtnClick(item)}>+</Button>
                     </ButtonGroup>
                   </div> :
                   null
@@ -201,7 +218,7 @@ const Index = () => {
           </div>
           <div className='d-flex justify-content-between mt-2'>
             <p className='m-0'><TbTruckDelivery className='me-2' />Delivery Charge </p>
-            <p className='fw-bold text-success'>Free</p>
+            <p style={{color: primaryColor}} className='fw-bold'>Free</p>
           </div>
 
 
@@ -212,6 +229,7 @@ const Index = () => {
 
           <div className='d-flex justify-content-center mt-5'>
             <button
+            style={{backgroundColor: primaryColor}}
               className='submit-btn'
               onClick={() => payBtnClick()}
             >Proceed To Pay {currency ? currency : null} {getTotalAmt() ? getTotalAmt() : null} </button>
@@ -240,7 +258,7 @@ const Index = () => {
         </div>
         <div className='d-flex justify-content-between'>
           <p className='m-0'><TbTruckDelivery className='me-2' />Delivery Charge </p>
-          <p className='fw-bold text-success'>Free</p>
+          <p style={{color: primaryColor}} className='fw-bold'>Free</p>
         </div>
         <div className='d-flex justify-content-between'>
           <p className='m-0 fw-bold'>Grant Total </p>
@@ -263,7 +281,7 @@ const Index = () => {
 
   const payBtnClick = () => {
     navigate("/delivery/details")
-    dispatch({type:"ROUTE_UPDATE", payload:"/delivery/details"})
+    dispatch({ type: "ROUTE_UPDATE", payload: "/delivery/details" })
   }
 
 
@@ -296,6 +314,7 @@ const Index = () => {
             <div className='jr-card m-0'>
               <div className='d-flex justify-content-center '>
                 <button
+                  style={{backgroundColor: primaryColor}}
                   onClick={() => payBtnClick()}
                   className='submit-btn rounded px-5 py-2'
                 >Proceed To Pay {currency ? currency : null} {getTotalAmt() ? getTotalAmt() : null}</button>
