@@ -3,20 +3,22 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Product from '../Product/Product';
 import { Skeleton } from '@mui/material';
 import { useSelector } from 'react-redux';
-const Index = () => {
+import "./productlist.scss"
+
+const Index = ({ productLists }) => {
 
     const globalState = useSelector(state => state)
     const [state, setState] = useState({
-        productList: globalState.overallProducts,
+        productList: productLists,
         skeletonArr: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {},]
     })
-console.log("globalState.overallProductsglobalState.overallProducts ",globalState.overallProducts);
+    console.log("globalState.overallProductsglobalState.overallProducts ", globalState.overallProducts);
     useEffect(() => {
         setState((state) => ({
             ...state,
-            productList: globalState.overallProducts
+            productList: productLists
         }))
-    }, [globalState.overallProducts])
+    }, [productLists])
     const { productList, skeletonArr } = state;
 
     const setStateAgainFun = useCallback((check, clickedItem) => {
@@ -50,7 +52,7 @@ console.log("globalState.overallProductsglobalState.overallProducts ",globalStat
         <div>
             {productList.length > 0 ?
 
-                <div style={{overflowY:"hidden"}} className=' d-flex flex-row overflow-x-auto p-0'>
+                <div style={{ overflowY: "hidden" }} className='scroll-container d-flex flex-row overflow-x-auto p-0'>
                     {productList.map((item) => {
                         return (
                             <div className=' col-lg-2 col-md-3 col-sm-6 col-6 mb-2 px-1'>
@@ -71,7 +73,7 @@ console.log("globalState.overallProductsglobalState.overallProducts ",globalStat
                             </div>
                         )
                     })}
-                     {productList.map((item) => {
+                    {productList.map((item) => {
                         return (
                             <div className=' col-lg-2 col-md-3 col-sm-6 col-6 mb-2 px-1'>
 
@@ -91,7 +93,7 @@ console.log("globalState.overallProductsglobalState.overallProducts ",globalStat
                             </div>
                         )
                     })}
-                     {productList.map((item) => {
+                    {productList.map((item) => {
                         return (
                             <div className=' col-lg-2 col-md-3 col-sm-6 col-6 mb-2 px-1'>
 

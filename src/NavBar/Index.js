@@ -34,7 +34,7 @@ function Index() {
     categoryClick: false
   })
   const [locationGetDialog, setLocationGetDialog] = useState(false)
-const [openlogInDialog, setOpenlogInDialog] = useState(false)
+  const [openlogInDialog, setOpenlogInDialog] = useState(false)
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -130,7 +130,7 @@ const [openlogInDialog, setOpenlogInDialog] = useState(false)
     dispatch({ type: "ROUTE_UPDATE", payload: `/` })
   }
 
-  const signInBtnClick=()=>{
+  const signInBtnClick = () => {
     setOpenlogInDialog(true)
     console.log("ssssssssss")
     // dispatch({ type: "open_dialog", payload: true })
@@ -138,21 +138,14 @@ const [openlogInDialog, setOpenlogInDialog] = useState(false)
   }
 
   const loginDialogBuild = () => {
-    return(
-      <LogInCom />   
-    //   <Dialog
-    //   open={openlogInDialog}
-    //   fullWidth
-    //   // onClose={()=> setOpenlogInDialog(false)}
-    // >
-    //   <DialogTitle>Subscribe</DialogTitle>
-    //   <DialogContent>
-   
-    //   </DialogContent>
-    //   <DialogActions>
-    //     </DialogActions>
-    //     </Dialog>
-    )
+    return (
+      <div>
+        <LogInCom loginPageCallBack={callbackFun} />
+      </div>)
+  }
+
+ const callbackFun = () => {
+    setOpenlogInDialog(false)
   }
   const token = !!localStorage.getItem("_Auth")
   return (// render()
@@ -217,7 +210,7 @@ const [openlogInDialog, setOpenlogInDialog] = useState(false)
                   {globalState.addWhishList.length > 0 ? <div className='whishlist-dot bg-danger'></div> : null}
                 </div>
               </IconButton>
-              <Button onClick={()=> signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button>
+              <Button onClick={() => signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button>
 
             </div>
           </div>
@@ -225,7 +218,7 @@ const [openlogInDialog, setOpenlogInDialog] = useState(false)
       </div>
 
 
-                        {openlogInDialog && loginDialogBuild()}
+      {openlogInDialog && loginDialogBuild()}
     </div>
   )
 }

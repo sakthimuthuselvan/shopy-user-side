@@ -1,6 +1,5 @@
 import { Button, IconButton, InputLabel, TextField, Typography, useTheme, } from '@mui/material';
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import HttpRequest from '../Utilities/ApiCall/HttpRequest';
 import "./signin.css"
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -8,15 +7,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import WindowWidth from "../Utilities/index"
 import Loader from '../Utilities/Loader/Loader';
 import { useDispatch } from 'react-redux';
 import MySnackbar from '../AlertShow/Alert';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import SignUp from '../SignUp/SignUp';
 import OtpCom from '../OtpCom/OtpCom';
@@ -26,7 +22,7 @@ import { encrypt } from '../Utilities/Util';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-function SignIn() {
+function SignIn(props) {
     const theme = useTheme();  // Access the current theme
     const primaryColor = theme.palette.primary.main;  // Get the primary color
     const [state, setState] = useState({
@@ -50,8 +46,6 @@ function SignIn() {
     const { email, password, emailErr, signUpCheck, dontClose, openDialog, passwordErr, errMsg, showPassword, showLoader, openSnackbar, snackType, snackMessage } = state;
 
     useEffect(() => {
-        console.log("///////////////////////////");
-
         setState((pre) => {
             return {
                 ...pre,
@@ -62,26 +56,6 @@ function SignIn() {
             }
         })
     }, [])
-
-
-    // useEffect(()=>{
-    //         setState((pre) => {
-    //             return {
-    //                 ...pre,
-    //                 dontClose: globalState.dontClose
-    //             }
-    //         })
-
-    // },[globalState.dontClose])
-
-    // useEffect(() => {
-    //     setState((pre) => {
-    //         return {
-    //             ...pre,
-    //             openDialog: globalState.openPopup
-    //         }
-    //     })
-    // }, [])
 
 
     const handleClose = () => {
@@ -281,21 +255,25 @@ function SignIn() {
         )
     }
 
-    const size = WindowWidth()
+    const dialogCloseFun=()=>{
+        setState((pre)=>({
+            ...pre,
+            openDialog: false
+        }))
+        props.loginPageCallBack(false)
+    }
     console.log("openDialog ", openDialog)
     return (
         <div>
             <Loader open={showLoader} />
             <MySnackbar open={openSnackbar} type={snackType} variant={"filled"} message={snackMessage} duration={3000} onClose={() => setState((pre) => ({ ...pre, openSnackbar: false }))} />
-            <div className={size === "lg" ? 'overall-signin rounded' : "overall-small"}>
-                <div className={`p-0 w-100 d-flex ${size === "lg" ? "jr-card jr-card-style" : ""}`}>
-                    <Dialog
+            <Dialog
                         open={openDialog}
                         TransitionComponent={Transition}
                         keepMounted
                         maxWidth={'xs'}
                         fullWidth
-                        // onClose={dontClose ? null : handleClose}
+                        onClose={dialogCloseFun}
                         aria-describedby="alert-dialog-slide-description"
                     >
                         <DialogContent className='p-1'>
@@ -316,8 +294,6 @@ function SignIn() {
                         <DialogActions>
                         </DialogActions>
                     </Dialog>
-                </div>
-            </div>
         </div>
     )
 }

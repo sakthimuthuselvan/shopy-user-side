@@ -1,20 +1,19 @@
 import React, { Suspense, useEffect, useState } from 'react'
-import Loader from '../../Utilities/Loader/Loader';
-import "./overview.css"
-import SliderCom from '../Slider/SliderCom';
-import CategoryList from "../Category/Index"
-import AddvertismentCards from "../AddvertismentCard/index";
 import { encrypt } from '../../Utilities/Util';
 import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
-import MySnackbar from '../../AlertShow/Alert';
-import { useDispatch, useSelector } from 'react-redux';
 import { Typography } from '@mui/material';
+import { useTheme } from '@emotion/react';
 
+const MySnackbar = React.lazy(() => import("../../AlertShow/Alert"))
 const ProductListCom = React.lazy(() => import("../ProductList/ProductListCom"))
+const AddvertismentCards = React.lazy(() => import("../AddvertismentCard/index"))
+const SliderCom = React.lazy(() => import("../Slider/SliderCom"))
+const CategoryList = React.lazy(() => import("../Category/Index"))
+const FooterCom = React.lazy(() => import("../Footer/FooterCom"))
 
 function OverView() {
-  const globalState = useSelector((state) => state);
-  const dispatch = useDispatch()
+    const theme = useTheme();  // Access the current theme
+    const secondaryColor = theme.palette.secondary.main;  // Get the secondaryColor color
 
   const [state, setState] = useState({
     productLists: [],
@@ -139,17 +138,26 @@ function OverView() {
     }
   }
 
+console.log("productLists ",productLists);
 
   return (
     <div>
-      <Loader open={false} />
-      <MySnackbar open={openSnakbar} type={openSnakbarType} variant={"filled"} message={openSnakbarMsg} duration={3000} handleClose={() => setState((pre) => ({ ...pre, openSnakbar: false }))} />
+          {openSnakbar ?   <Suspense fallback={<h1> </h1>}>
+            <MySnackbar open={openSnakbar} type={openSnakbarType} variant={"filled"} message={openSnakbarMsg} duration={3000} handleClose={() => setState((pre) => ({ ...pre, openSnakbar: false }))} />
+            </Suspense> : null}
 
-      <SliderCom SliderData={sliderOverall} />
+            <Suspense fallback={<h1> </h1>}>
+            <SliderCom SliderData={sliderOverall} />
+            </Suspense>
+
       <div className='px-3'>
         <div>
+          <Suspense fallback={<h1> </h1>}>
           <AddvertismentCards addvertismentData={addvertismentData} />
+          </Suspense>
+          <Suspense fallback={<h1> </h1>}>
           <CategoryList categoryList={categoryList} />
+          </Suspense>
         </div>
       </div>
 
@@ -157,8 +165,16 @@ function OverView() {
         {/* <h3 className='title pt-3 pb-2'>Most Buying Products</h3> */}
         <Typography variant='h6' className='fw-bold pt-3 pb-2'>Most Buying Products</Typography>
         <div>
-          <Suspense fallback={<h1> </h1>}><ProductListCom productLists={productLists} /></Suspense>
+          <Suspense fallback={<h1> </h1>}>
+          <ProductListCom productLists={productLists} />
+          </Suspense>
         </div>
+      </div>
+
+      <div style={{backgroundColor: secondaryColor}} className='px-3'>
+<Suspense fallback={<h1> </h1>}>
+<FooterCom />
+</Suspense>
       </div>
 
       {/* <div className=' px-3 mt-3'>
