@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react'
 import "./category.css"
 import { useNavigate } from 'react-router-dom'
 import { Skeleton, Typography } from '@mui/material'
-import { useDispatch } from 'react-redux'
 
 const Index = ({ categoryList }) => {
     const base_url = process.env.REACT_APP_BASE_URL;
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [state, setState] = useState({
         overallCategory: [],
@@ -24,8 +22,6 @@ const Index = ({ categoryList }) => {
     const { overallCategory, seletonArr, baseUrl } = state;
     const categorySelectFun = (item) => {
         navigate(`/categoty/${item._id}`)
-        dispatch({type:"ROUTE_UPDATE", payload:`/categoty/${item._id}`})
-
     }
     return (
         <div className='mt-3'>

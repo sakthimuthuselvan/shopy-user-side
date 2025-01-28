@@ -9,6 +9,8 @@ const ProductListCom = React.lazy(() => import("../ProductList/ProductListCom"))
 const AddvertismentCards = React.lazy(() => import("../AddvertismentCard/index"))
 const SliderCom = React.lazy(() => import("../Slider/SliderCom"))
 const CategoryList = React.lazy(() => import("../Category/Index"))
+const MostBuyingCom = React.lazy(() => import("../MostBuying/MostBuying"))
+
 const FooterCom = React.lazy(() => import("../Footer/FooterCom"))
 
 function OverView() {
@@ -166,7 +168,7 @@ console.log("productLists ",productLists);
         <Typography variant='h6' className='fw-bold pt-3 pb-2'>Most Buying Products</Typography>
         <div>
           <Suspense fallback={<h1> </h1>}>
-          <ProductListCom productLists={productLists} />
+          <MostBuyingCom productLists={productLists} />
           </Suspense>
         </div>
       </div>

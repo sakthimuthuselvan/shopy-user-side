@@ -7,18 +7,15 @@ import WindowWidth from '../../Utilities';
 import { CgNotes } from "react-icons/cg";
 import { TbTruckDelivery } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@emotion/react';
 
 const Index = () => {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
-  const gloablState = useSelector((state) => state)
-  const dispatch = useDispatch()
-  console.log("======== ", gloablState);
+
   const navigate = useNavigate()
   const [currency, setCurrency] = useState("₹")
-  const [overallList, setOverallList] = useState(gloablState.addCartProduct)
+  const [overallList, setOverallList] = useState([])
   const [skeletonShow, setskeletonShow] = useState()
 
 
@@ -281,7 +278,6 @@ const Index = () => {
 
   const payBtnClick = () => {
     navigate("/delivery/details")
-    dispatch({ type: "ROUTE_UPDATE", payload: "/delivery/details" })
   }
 
 

@@ -7,7 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import WindowWidth from '../Utilities';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Logout from '@mui/icons-material/Logout';
 import Login from '@mui/icons-material/Login';
 import CloseIcon from '@mui/icons-material/Close';
@@ -20,7 +20,6 @@ import { useTheme } from '@emotion/react';
 import LogInCom from "../SignIn/SingIn"
 
 function Index() {
-  const sidebarRef = useRef();
   const navigate = useNavigate()
   const location = useLocation()
   const theme = useTheme();  // Access the current theme
@@ -33,17 +32,12 @@ function Index() {
     sideBar: false,
     categoryClick: false
   })
-  const [locationGetDialog, setLocationGetDialog] = useState(false)
   const [openlogInDialog, setOpenlogInDialog] = useState(false)
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const { isClicked, sideBar, categoryClick } = state;
-
-
-  const globalState = useSelector((state) => state);
-  const dispatch = useDispatch()
 
   useEffect(() => {
     document.addEventListener('mousedown', handleOutsideClick)
@@ -65,7 +59,6 @@ function Index() {
   const handleClick = (event) => {
     // setAnchorEl(event.currentTarget);
     navigate("/wish-list")
-    dispatch({ type: "ROUTE_UPDATE", payload: `/wish-list` })
 
   };
   const handleClose = () => {
@@ -73,23 +66,6 @@ function Index() {
   };
 
   const size = WindowWidth()
-
-  const closeBtnClick = () => {
-    localStorage.setItem("_theme", isClicked)
-    setState({
-      ...state,
-      isClicked: !isClicked
-    })
-  }
-  const loginBtnClick = () => {
-    setAnchorEl(null);
-    dispatch({ type: "open_dialog", payload: true })
-  }
-
-  const logoutBtnClick = () => {
-    localStorage.removeItem("_Auth")
-    window.location.reload();
-  }
 
   const sideBaropen = () => {
     setState((pre) => {
@@ -121,19 +97,15 @@ function Index() {
 
   const addToCardBtnClick = () => {
     navigate("/add/to/card")
-    dispatch({ type: "ROUTE_UPDATE", payload: `/add/to/card` })
 
   }
 
   const homeBtnClick = () => {
     navigate("/")
-    dispatch({ type: "ROUTE_UPDATE", payload: `/` })
   }
 
   const signInBtnClick = () => {
     setOpenlogInDialog(true)
-    console.log("ssssssssss")
-    // dispatch({ type: "open_dialog", payload: true })
 
   }
 
@@ -196,7 +168,7 @@ function Index() {
               : null}
             <div className='text-white'>
               <IconButton onClick={() => addToCardBtnClick()}>
-                <Badge badgeContent={globalState.addCartProduct.length} color="error">
+                <Badge badgeContent={0} color="error">
                   <ShoppingCartOutlinedIcon className='text-white' sx={{ fontSize: 25 }} />
                 </Badge>
               </IconButton>
@@ -207,7 +179,7 @@ function Index() {
               >
                 <div className='overall-heart'>
                   <FavoriteBorderIcon className='text-white' sx={{ fontSize: 25 }} />
-                  {globalState.addWhishList.length > 0 ? <div className='whishlist-dot bg-danger'></div> : null}
+                  {<div className='whishlist-dot bg-danger'></div>}
                 </div>
               </IconButton>
               <Button onClick={() => signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button>

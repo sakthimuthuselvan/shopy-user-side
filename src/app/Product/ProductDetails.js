@@ -5,7 +5,6 @@ import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
 import { encrypt } from '../../Utilities/Util';
 import product1 from "../../Asset/product/product1.png"
 import { Button, Skeleton } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useTheme } from '@emotion/react';
@@ -16,64 +15,63 @@ const ProductDetails = () => {
   const base_url = process.env.REACT_APP_BASE_URL;
 
   const { id } = useParams(); // Accessing the dynamic parameter ":id"
-  const dispatch = useDispatch((state) => state);
-  const gobalData = useSelector(state => state)
-  console.log(gobalData);
 
   const [state, setState] = useState({
     overallDetails: {},
     skeletonShow: false,
-    overallProducts: gobalData.overallProducts
+    overallProducts: []
   })
-
-  const { overallDetails,overallProducts } = state;
+const { overallDetails } = state;
   useEffect(() => {
-initialFun()
-    // productDetailsAPiCall()
-  }, [])
+    console.log("============= ",id);
+    
+    productDetailsAPiCall(id)
+  }, [id])
 
   const initialFun=()=>{
-    const selectedProduct = overallProducts.find((item)=> item._id === id)
-    console.log("selectedProduct ",selectedProduct);
-    setState((state) => ({
-     ...state,
-     overallDetails: selectedProduct,
-     skeletonShow: false
-   }))
+  //   const selectedProduct = overallProducts.find((item)=> item._id === id)
+  //   console.log("selectedProduct ",selectedProduct);
+  //   setState((state) => ({
+  //    ...state,
+  //    overallDetails: selectedProduct,
+  //    skeletonShow: false
+  //  }))
   }
-  const productDetailsAPiCall = async () => {
+  const productDetailsAPiCall = async (id) => {
     setState((state) => ({ ...state, skeletonShow: true }))
     const method = "Post";
-    const url = "dummay/api-call";
+    const url = "product/get/product/details";
     const data = {
-      "email": "email"
+      "product_id": id
     }
+console.log("data ",data);
+
     const encrypted = {
       data: encrypt(JSON.stringify(data))
     }
     try {
       const response = await HttpRequest({ method, url, encrypted });
       console.log(response.response_data);
-      const data = {
-        product_images: [product1, product1],
-        product_name: "Onion (Nattu vengayam)",
-        product_type: "vegitable",
-        messure: "kg",
-        size: 1,
-        price: 50,
-        is_whishList: 0,
-        about_product: "",
-        is_offer: 1,
-        old_price: 70,
-        offer_percentage: 40,
-        add_cart: 0,
-        currency: "₹",
-        suggestion_product: [],
-        total_quantity: 0,
-      }
+      // const data = {
+      //   product_images: [product1, product1],
+      //   product_name: "Onion (Nattu vengayam)",
+      //   product_type: "vegitable",
+      //   messure: "kg",
+      //   size: 1,
+      //   price: 50,
+      //   is_whishList: 0,
+      //   about_product: "",
+      //   is_offer: 1,
+      //   old_price: 70,
+      //   offer_percentage: 40,
+      //   add_cart: 0,
+      //   currency: "₹",
+      //   suggestion_product: [],
+      //   total_quantity: 0,
+      // }
       setState((state) => ({
         ...state,
-        overallDetails: data,
+        overallDetails: response.response_data ? response.response_data : {},
         skeletonShow: false
       }))
     } catch (error) {
@@ -85,67 +83,63 @@ initialFun()
 
   const cancelBtnClick = (item) => {
     // remove from the cart API call
-    dispatch({ type: "CANCEL_CART", payload: item })
   }
 
   const addBtnClick = (item) => {
     //Add to cart API call
-    dispatch({ type: "ADD_CART", payload: item })
   }
 
   const whishListBtnClick = (item) => {
     if (item.is_whishList === 1) {
       // remove wish list Api call
-      dispatch({ type: "REMOVE_WISHLIST", payload: item })
 
     } else {
       // add whish list Apicall
-      dispatch({ type: "ADD_WISHLIST", payload: item })
 
     }
   }
 
-  const addToCartApiCall = async () => {
-    setState((state) => ({ ...state, skeletonShow: true }))
-    const method = "Post";
-    const url = "dummay/api-call";
-    const data = {
-      "email": "email"
-    }
-    const encrypted = {
-      data: encrypt(JSON.stringify(data))
-    }
-    try {
-      const response = await HttpRequest({ method, url, encrypted });
-      console.log(response.response_data);
-      const data = {
-        product_images: [product1, product1],
-        product_name: "Onion (Nattu vengayam)",
-        product_type: "vegitable",
-        messure: "kg",
-        size: 1,
-        price: 50,
-        is_whishList: 0,
-        about_product: "",
-        is_offer: 1,
-        old_price: 70,
-        offer_percentage: 40,
-        add_cart: 0,
-        currency: "₹",
-        suggestion_product: [],
-        total_quantity: 0,
-      }
-      setState((state) => ({
-        ...state,
-        overallDetails: data,
-        skeletonShow: false
-      }))
-    } catch (error) {
+  // const addToCartApiCall = async () => {
+  //   setState((state) => ({ ...state, skeletonShow: true }))
+  //   const method = "Post";
+  //   const url = "dummay/api-call";
+  //   const data = {
+  //     "email": "email"
+  //   }
+  //   const encrypted = {
+  //     data: encrypt(JSON.stringify(data))
+  //   }
+  //   try {
+  //     const response = await HttpRequest({ method, url, encrypted });
+  //     console.log(response.response_data);
+  //     const data = {
+  //       product_images: [product1, product1],
+  //       product_name: "Onion (Nattu vengayam)",
+  //       product_type: "vegitable",
+  //       messure: "kg",
+  //       size: 1,
+  //       price: 50,
+  //       is_whishList: 0,
+  //       about_product: "",
+  //       is_offer: 1,
+  //       old_price: 70,
+  //       offer_percentage: 40,
+  //       add_cart: 0,
+  //       currency: "₹",
+  //       suggestion_product: [],
+  //       total_quantity: 0,
+  //     }
+  //     setState((state) => ({
+  //       ...state,
+  //       overallDetails: data,
+  //       skeletonShow: false
+  //     }))
+  //   } catch (error) {
 
-      console.log(error);
+  //     console.log(error);
 
-    }
-  }
+  //   }
+  // }
 
   const settings = {
     dots: true,
@@ -156,6 +150,7 @@ initialFun()
   };
   return (
     <div className=''>
+    <h1>sssss</h1>
       {Object.keys(overallDetails).length > 0 ?
         <div className='row m-0'>
           <div className='col-lg-6 col-md-6 col-sm-12 col-12 py-3 d-flex justify-content-center'>

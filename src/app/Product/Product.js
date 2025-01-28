@@ -3,150 +3,53 @@ import product1 from "../../Asset/product/product1.png"
 import { Button, Typography } from '@mui/material'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { useDispatch, useSelector, } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import proImg from "./imag.png"
 import { useTheme } from '@emotion/react';
+import { addToCart, removeFromCart } from '../../Redux/Features/CartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 const Product = (props) => {
+  const dispatch = useDispatch();
+  const cartProducts = useSelector(state => state.cart.cartProducts)
+  console.log("productData ",cartProducts);
+  
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;
   const { setStateAgainFun, productDetail } = props;
   const base_url = process.env.REACT_APP_BASE_URL;
-  const cartName = "_CART_"
-  const wishListName = "WISH_LIST"
 
 
-  const overallProducts = useSelector((state) => state.overallProducts);
-  console.log("overallProductsoverallProducts ", overallProducts);
   const [state, setState] = useState({
     productDetails: [],
     currency: "₹",
+    overallProducts: []
   })
 
 
-  const dispatch = useDispatch();
   const navigate = useNavigate()
-  const { productDetails, currency } = state;
+  const { productDetails, currency, overallProducts } = state;
   useEffect(() => {
     setState((state) => ({
       ...state,
       productDetails: productDetail
     }))
-  }, [productDetail])
+  }, [cartProducts])
 
   const addBtnClick = (item) => {
-    // setStateAgainFun("add", item)
-    // dispatch({ type: "ADD_CART", payload: item })
-
-
-    let prev = localStorage.getItem(cartName)
-    prev = prev ? JSON.parse(prev) : []
-
-    localStorage.setItem(cartName, JSON.stringify([...prev, item._id]))
-
-    const arr = []
-    let selected = {}
-
-
-    overallProducts.forEach((data) => {
-      if (data._id === item._id) {
-        selected = { ...data, "add_cart": true };
-        arr.push(selected);
-      } else if (!arr.some(product => product._id === data._id)) {
-        arr.push(data);
-      }
-    });
-
-    dispatch({ type: "PRODUCTS_LIST", payload: arr })
-    setState((state) => ({
-      ...state,
-      productDetails: selected
-    }))
-
-
+    dispatch(addToCart(item))
   }
 
   const cancelBtnClick = (item) => {
-    // setStateAgainFun("cancel", item)
-    // dispatch({ type: "CANCEL_CART", payload: item })
-
-
-    let prev = localStorage.getItem(cartName)
-    prev = prev ? JSON.parse(prev) : []
-
-    localStorage.setItem(cartName, JSON.stringify([...prev, item._id]))
-
-    const arr = []
-    let selected = {}
-
-
-    overallProducts.forEach((data) => {
-      if (data._id === item._id) {
-        selected = { ...data, "add_cart": false };
-        arr.push(selected);
-      } else if (!arr.some(product => product._id === data._id)) {
-        arr.push(data);
-      }
-    });
-
-    dispatch({ type: "PRODUCTS_LIST", payload: arr })
-    setState((state) => ({
-      ...state,
-      productDetails: selected
-    }))
+    dispatch(removeFromCart(item))
   }
 
   const whishListBtnClick = (item) => {
     console.log("item _", item._id);
     if (item.is_whishList === 1) {
-      let prev = localStorage.getItem(wishListName)
-      console.log(prev);
-      prev = prev ? JSON.parse(prev) : []
-      const filterArr = prev.filter((data) => data !== item._id)
-      localStorage.setItem(wishListName, JSON.stringify(filterArr))
-
-      const arr = []
-      let selected = {}
-      overallProducts.forEach((data) => {
-        if (data._id === item._id) {
-          selected = { ...data, "is_whishList": 0 };
-          arr.push(selected);
-        } else if (!arr.some(product => product._id === data._id)) {
-          arr.push(data);
-        }
-      });
-
-
-      dispatch({ type: "PRODUCTS_LIST", payload: arr })
-      setState((state) => ({
-        ...state,
-        productDetails: selected
-      }))
 
     } else {
-      let prev = localStorage.getItem(wishListName)
-      prev = prev ? JSON.parse(prev) : []
-
-      localStorage.setItem(wishListName, JSON.stringify([...prev, item._id]))
-
-      const arr = []
-      let selected = {}
-
-
-      overallProducts.forEach((data) => {
-        if (data._id === item._id) {
-          selected = { ...data, "is_whishList": 1 };
-          arr.push(selected);
-        } else if (!arr.some(product => product._id === data._id)) {
-          arr.push(data);
-        }
-      });
-
-      dispatch({ type: "PRODUCTS_LIST", payload: arr })
-      setState((state) => ({
-        ...state,
-        productDetails: selected
-      }))
+   
 
     }
   }
@@ -154,7 +57,6 @@ const Product = (props) => {
   const productDetailBtnClick = (product) => {
     if (productDetails.total_quantity !== 0) {
       navigate(`/product/details/${product._id}`)
-      dispatch({ type: "ROUTE_UPDATE", payload: `/product/details/${product._id}` })
 
     }
   }
@@ -163,19 +65,21 @@ const Product = (props) => {
     demandStocks = true
   }
 
-  // console.log("productDetails ", productDetails);
-  return (
+  const isCart = cartProducts.some((each)=> each._id === productDetail._id)
+
+  console.log("isCartisCart ", isCart);
+  return ( // render()
     <div className={productDetails.total_quantity !== 0 ? "pointer" : 'overall-out-off-stock'} >
       <div className='img-card p-0 pt-2'>
-        <div  style={{display:"flex",flexDirection:"column",alignContent:"space-around"}} className=''>
-          <div  onClick={() => productDetailBtnClick(productDetails)} className='p-3 pt-1 h-25'>
+        <div style={{ display: "flex", flexDirection: "column", alignContent: "space-around" }} className=''>
+          <div onClick={() => productDetailBtnClick(productDetails)} className='p-3 pt-1 h-25'>
             <img src={productDetails.cover_image} alt='product' className='w-100' />
           </div>
 
 
 
 
-          <div style={{height:150}}>
+          <div style={{ height: 150 }}>
             <div className='overall-few-stocks-label'>
               {demandStocks ?
                 <div className='few-stocks-label p-3 py-0 text-danger'><small className='bold fs-10'>Only few stocks left</small></div>
@@ -204,19 +108,17 @@ const Product = (props) => {
                 </div>
                 {productDetails.total_quantity !== 0 ?
                   <div>
-                    {productDetails.add_cart ?
+                    {isCart ?
                       <Button
-                      sx={{ backgroundColor: 'secondary.main', color: 'white', '&:hover': { backgroundColor: 'secondary.dark' } }}
+                        sx={{ backgroundColor: 'secondary.main', color: 'white', '&:hover': { backgroundColor: 'secondary.dark' } }}
                         variant='contained'
-                        // className='bg-secondary text-black bold'
                         size='small'
                         onClick={() => cancelBtnClick(productDetails)}
                       ><span className='bold'>Cancel</span></Button>
                       :
                       <Button
-                      sx={{ backgroundColor: 'primary.main', color: 'white', '&:hover': { backgroundColor: 'primary.dark' } }}
+                        sx={{ backgroundColor: 'primary.main', color: 'white', '&:hover': { backgroundColor: 'primary.dark' } }}
                         variant='contained'
-                        // className='btn-primary'
                         size='small'
                         onClick={() => addBtnClick(productDetails)}
                       ><span className='bold'>Add</span></Button>
