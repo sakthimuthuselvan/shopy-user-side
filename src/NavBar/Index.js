@@ -24,7 +24,7 @@ function Index() {
   const location = useLocation()
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
-
+  const cartProducts = useSelector((state)=> state.cart.cartProducts)
   // const [companyName] = useState("Shopy")
   const [state, setState] = useState({
     isClicked: false,
@@ -168,7 +168,7 @@ function Index() {
               : null}
             <div className='text-white'>
               <IconButton onClick={() => addToCardBtnClick()}>
-                <Badge badgeContent={0} color="error">
+                <Badge badgeContent={cartProducts.length} color="error">
                   <ShoppingCartOutlinedIcon className='text-white' sx={{ fontSize: 25 }} />
                 </Badge>
               </IconButton>

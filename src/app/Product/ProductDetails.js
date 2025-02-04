@@ -8,11 +8,17 @@ import { Button, Skeleton } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useTheme } from '@emotion/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, removeFromCart } from '../../Redux/Features/CartSlice';
+import DOMPurify from 'dompurify';
+
 const ProductDetails = () => {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;
-
-  const base_url = process.env.REACT_APP_BASE_URL;
+   const cartProducts = useSelector(state => state.cart.cartProducts)
+   console.log("cartProducts ",cartProducts);
+   
+  const dispatch = useDispatch()
 
   const { id } = useParams(); // Accessing the dynamic parameter ":id"
 
@@ -25,8 +31,11 @@ const { overallDetails } = state;
   useEffect(() => {
     console.log("============= ",id);
     
+   if(id){
     productDetailsAPiCall(id)
-  }, [id])
+   }
+
+  }, [id, cartProducts])
 
   const initialFun=()=>{
   //   const selectedProduct = overallProducts.find((item)=> item._id === id)
@@ -45,7 +54,6 @@ const { overallDetails } = state;
       "product_id": id
     }
 console.log("data ",data);
-
     const encrypted = {
       data: encrypt(JSON.stringify(data))
     }
@@ -83,10 +91,13 @@ console.log("data ",data);
 
   const cancelBtnClick = (item) => {
     // remove from the cart API call
+        dispatch(removeFromCart(item))
+    
   }
 
   const addBtnClick = (item) => {
     //Add to cart API call
+    dispatch(addToCart(item))
   }
 
   const whishListBtnClick = (item) => {
@@ -99,48 +110,6 @@ console.log("data ",data);
     }
   }
 
-  // const addToCartApiCall = async () => {
-  //   setState((state) => ({ ...state, skeletonShow: true }))
-  //   const method = "Post";
-  //   const url = "dummay/api-call";
-  //   const data = {
-  //     "email": "email"
-  //   }
-  //   const encrypted = {
-  //     data: encrypt(JSON.stringify(data))
-  //   }
-  //   try {
-  //     const response = await HttpRequest({ method, url, encrypted });
-  //     console.log(response.response_data);
-  //     const data = {
-  //       product_images: [product1, product1],
-  //       product_name: "Onion (Nattu vengayam)",
-  //       product_type: "vegitable",
-  //       messure: "kg",
-  //       size: 1,
-  //       price: 50,
-  //       is_whishList: 0,
-  //       about_product: "",
-  //       is_offer: 1,
-  //       old_price: 70,
-  //       offer_percentage: 40,
-  //       add_cart: 0,
-  //       currency: "₹",
-  //       suggestion_product: [],
-  //       total_quantity: 0,
-  //     }
-  //     setState((state) => ({
-  //       ...state,
-  //       overallDetails: data,
-  //       skeletonShow: false
-  //     }))
-  //   } catch (error) {
-
-  //     console.log(error);
-
-  //   }
-  // }
-
   const settings = {
     dots: true,
     slidesToShow: 1,
@@ -148,15 +117,17 @@ console.log("data ",data);
     autoplay: false,
     focus: false,
   };
+  const isCheckCart = cartProducts.map((item)=> item._id).includes(id)
+  console.log("isCheckCart ",isCheckCart);
+  
   return (
     <div className=''>
-    <h1>sssss</h1>
       {Object.keys(overallDetails).length > 0 ?
         <div className='row m-0'>
           <div className='col-lg-6 col-md-6 col-sm-12 col-12 py-3 d-flex justify-content-center'>
-            <div className='border w-100 py-5'>
-              <Slider {...settings}>
-                {Object.keys(overallDetails).length > 0 && overallDetails.product_images.map((item) => {
+            <div className='border w-100 py-2'>
+              {overallDetails.product_images.length > 1 ? <Slider {...settings}>
+                {overallDetails.product_images.map((item) => {
                   return (
                     <div className='d-flex justify-content-center'>
                       <img src={item} className='' height={350}/>
@@ -164,6 +135,10 @@ console.log("data ",data);
                   )
                 })}
               </Slider>
+              : 
+              <div className='d-flex justify-content-center'>
+              <img src={overallDetails.product_images[0]} className='' height={350}/>
+            </div>}
             </div>
           </div>
           <div className='col-lg-6 col-md-6 col-sm-12 col-12 mt-3 pl-2'>
@@ -173,9 +148,9 @@ console.log("data ",data);
                 <div className="mr-5 mt-2" onClick={() => whishListBtnClick(overallDetails)}>{overallDetails.is_whishList === 1 ? <FavoriteIcon className='text-danger' /> : <FavoriteBorderIcon />}</div>
 
               </div>
-              <h6 className='text-grey mt-3'>{overallDetails.size + overallDetails.messure}</h6>
+              <h6 className='text-grey mt-0'>{overallDetails.messure}</h6>
               <div className='d-flex mt-3'>
-                <h4 className='title'>{overallDetails.currency + overallDetails.price}</h4>
+                <h4 className='title'>{overallDetails.currency+" " + overallDetails.price}</h4>
 
                 {overallDetails.is_offer === 1 ?
 
@@ -190,7 +165,7 @@ console.log("data ",data);
               </div>
 
               <div className='mt-4'>
-                {overallDetails && overallDetails.add_cart ?
+                {isCheckCart ?
                   <Button
                   sx={{
                     backgroundColor: 'secondary.main', // Use primary color for background
@@ -200,7 +175,7 @@ console.log("data ",data);
                     },
                   }}
                     variant='contained'
-                    className='text-black bold'
+                    className='text-white bold'
                     size='small'
                     onClick={() => cancelBtnClick(overallDetails)}
                   ><span className='bold'>Cancel</span></Button>
@@ -221,7 +196,9 @@ console.log("data ",data);
                 }
               </div>
             </div>
-            <div className='border-top mt-4'></div>
+            <div className='border-top mt-4'>
+            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(overallDetails.description) }} />
+            </div>
           </div>
         </div> :
         <div className='row m-0'>

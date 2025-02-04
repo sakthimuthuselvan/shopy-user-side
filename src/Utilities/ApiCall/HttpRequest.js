@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 const HttpRequest = async ({ method, url, encrypted }) => {
+  console.log("encrypted ",encrypted);
+  
   try {
     const token = localStorage.getItem('Auth');
     const response = await axios({
