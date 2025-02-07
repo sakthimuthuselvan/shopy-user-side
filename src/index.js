@@ -56,6 +56,8 @@ const Root = () => {
     const data = response.response_data ? response.response_data : {};
     // Handle the response here
     setSiteData(data);
+    localStorage.setItem("CURRENCY", "₹")
+
   };
 
   // Define your Material-UI theme

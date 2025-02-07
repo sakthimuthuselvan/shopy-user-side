@@ -8,16 +8,19 @@ import { CgNotes } from "react-icons/cg";
 import { TbTruckDelivery } from "react-icons/tb";
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@emotion/react';
+import { useDispatch, useSelector } from 'react-redux';
+import { updatedCartProducts } from '../../Redux/Features/CartSlice';
 
 const Index = () => {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
+const productList = useSelector(state => state.cart.cartProducts).map((item)=>({...item,"quantity":1}))
 
   const navigate = useNavigate()
-  const [currency, setCurrency] = useState("₹")
-  const [overallList, setOverallList] = useState([])
+ const currency = localStorage.getItem("CURRENCY")
+const dispatch = useDispatch()
   const [skeletonShow, setskeletonShow] = useState()
-
+  const [cartProducts,setCardProducts] = useState(productList)
 
   useEffect(() => {
     listApiCall()
@@ -31,11 +34,8 @@ const Index = () => {
       "user_id": "6587f8b1d07e09ee517b9313",
       "product_id": ["663f179811d61a935fd6b712"]
     }
-    const encrypted = {
-      data: data
-    }
     try {
-      const response = await HttpRequest({ method, url, encrypted });
+      const response = await HttpRequest({ method, url, data });
       // const data = {
       //   product_images: [product1, product1],
       //   product_name: "Onion (Nattu vengayam)",
@@ -105,7 +105,7 @@ const Index = () => {
     const size = WindowWidth()
     return (
       <div>
-        {overallList.length > 0 && overallList.map((item) => {
+        {cartProducts.length > 0 && cartProducts.map((item) => {
           return (
             <div className='product-card jr-card p-0'>
               <div className='img-box'>
@@ -118,7 +118,7 @@ const Index = () => {
                   </b>
                   {item.messure ? <p>{item.messure}</p> : null}
                   <p className='mb-1'>{item.short_description}</p>
-                  <h6 className='fw-bold'>${item.price}</h6>
+                  <h6 className='fw-bold'>{currency} {item.price}</h6>
 
                   {size !== "lg" ?
                     <div className='mb-4'>
@@ -165,28 +165,31 @@ const Index = () => {
 
   const addMoreBtnClick = (item) => {
     console.log("addMoreBtnClick ", item);
-    const overall = overallList.map((data) => {
+    const overall = cartProducts.map((data) => {
       if (data._id === item._id) {
         return { ...data, "quantity": data.quantity + 1 }
       } else {
         return data
       }
     })
-    setOverallList(overall)
+    setCardProducts(overall)
+    dispatch(updatedCartProducts(overall))
     console.log("overall ", overall);
 
   }
 
   const dropBtnClick = (item) => {
     if (item.quantity > 0) {
-      const overall = overallList.map((data) => {
+      const overall = cartProducts.map((data) => {
         if (data._id === item._id) {
           return { ...data, "quantity": data.quantity - 1 }
         } else {
           return data
         }
       })
-      setOverallList(overall)
+      setCardProducts(overall)
+      dispatch(updatedCartProducts(overall))
+
     } else {
       console.log("remove api call");
     }
@@ -195,15 +198,9 @@ const Index = () => {
 
   const totalBuild = () => {
     let totalAmt = 0;
-    let currency = "";
-    let shipping = 0
-    overallList.forEach((item) => {
+    cartProducts.forEach((item) => {
       totalAmt += item.price * item.quantity
-      currency = item.currency
     })
-
-
-
     return (
       <div>
         <h4 className='fw-bold mb-2 text-center'>Bill Details</h4>
@@ -239,12 +236,9 @@ const Index = () => {
 
   const phoneBillDetails = () => {
     let totalAmt = 0;
-    let currency = "";
     let shipping = 0
-    overallList.forEach((item) => {
-      console.log("sasdadfd ", item.price * item.quantity);
+    cartProducts.forEach((item) => {
       totalAmt += item.price * item.quantity
-      currency = item.currency
     })
     return (
       <div className='jr-card mx-4'>
@@ -268,9 +262,7 @@ const Index = () => {
 
   const getTotalAmt = () => {
     let totalAmt = 0;
-    let currency = "";
-    let shipping = 0
-    overallList.forEach((item) => {
+    cartProducts.forEach((item) => {
       totalAmt += item.price * item.quantity
     })
     return totalAmt
@@ -282,13 +274,12 @@ const Index = () => {
 
 
   const size = WindowWidth()
-  console.log("currency ", currency);
   return (
     <div className='cart-style h-100 light-green'>
       <div className='position-relative px-lg-3 '>
         <div className='overall'>
           <div className='box1 px-lg-4'>
-            {overallList.length > 0 ?
+            {cartProducts.length > 0 ?
               produdutBuild()
 
               : skeletonBuild()
@@ -297,7 +288,7 @@ const Index = () => {
           <div className='box2'>
             <div className='card-box'>
               <div>
-                {overallList.length > 0 ?
+                {cartProducts.length > 0 ?
                   totalBuild()
                   : skeletonBuild2()
                 }

@@ -115,9 +115,7 @@ function OverView() {
     const data = {
       // "email": "email"
     }
-    const encrypted = {
-      data: encrypt(JSON.stringify(data))
-    }
+
     try {
       const response = await HttpRequest({ method, url, data });
       setState((state) => ({

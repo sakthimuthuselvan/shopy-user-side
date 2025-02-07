@@ -18,17 +18,17 @@ const Product = (props) => {
   const primaryColor = theme.palette.primary.main;
   const { setStateAgainFun, productDetail } = props;
   const base_url = process.env.REACT_APP_BASE_URL;
-
+  
+  const currency = localStorage.getItem("CURRENCY")
 
   const [state, setState] = useState({
     productDetails: [],
-    currency: "₹",
     overallProducts: []
   })
 
 
   const navigate = useNavigate()
-  const { productDetails, currency, overallProducts } = state;
+  const { productDetails,  overallProducts } = state;
   useEffect(() => {
     setState((state) => ({
       ...state,

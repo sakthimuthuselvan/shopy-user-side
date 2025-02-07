@@ -20,12 +20,9 @@ const ProductList = () => {
     const data = {
       "category_id": id
     }
-    const encrypted = {
-      data: data
-    }
-    console.log("datadata ", data);
+
     try {
-      const response = await HttpRequest({ method, url, encrypted });
+      const response = await HttpRequest({ method, url, data });
       console.log(response);
       setProductsList(response.response_data)
     } catch (error) {

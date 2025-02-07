@@ -112,11 +112,8 @@ function SignIn(props) {
             "email": email,
             "password": password
         }
-        const encrypted = {
-            data: encrypt(JSON.stringify(data))
-        }
-        console.log(encrypted);
-        const response = HttpRequest({ method, url, encrypted });
+
+        const response = HttpRequest({ method, url, data });
         response
             .then((res) => {
                 const message = res.response_message ? res.response_message : ""

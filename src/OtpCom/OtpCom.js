@@ -98,10 +98,8 @@ const OtpCom = ({ resetPasswordClick }) => {
         const data = {
             "email": email
         }
-        const encrypted = {
-            data: encrypt(JSON.stringify(data))
-        }
-        const response = HttpRequest({ method, url, encrypted });
+
+        const response = HttpRequest({ method, url, data });
         response
             .then((res) => {
                 const message = res.response_message
@@ -146,11 +144,9 @@ const OtpCom = ({ resetPasswordClick }) => {
             "email": email,
             "opt": otp
         }
-        const encrypted = {
-            data: encrypt(JSON.stringify(data))
-        }
+
         try {
-            const response = await HttpRequest({ method, url, encrypted });
+            const response = await HttpRequest({ method, url, data });
             setState((pre) => ({
                 ...pre,
                 showLoader: false,

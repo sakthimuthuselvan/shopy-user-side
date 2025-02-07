@@ -96,11 +96,8 @@ setState((pre)=>({
           email: globalState.email,
           password: confirmPassword, // Provide a valid password here
         };
-        const encrypted ={
-            data : encrypt(JSON.stringify(data))
-        } 
         try {
-          const response = await HttpRequest({ method, url, encrypted });
+          const response = await HttpRequest({ method, url, data });
           console.log(response);
           setState((pre)=>({
             ...pre,

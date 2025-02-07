@@ -104,10 +104,8 @@ function SignUp({goLogInFun}) {
             "password": password,
             "user_type":"user"
         }
-        const encrypted ={
-            data : encrypt(JSON.stringify(data))
-        } 
-        const response = HttpRequest({ method, url, encrypted });
+
+        const response = HttpRequest({ method, url, data });
         response
             .then((res) => {
                 setState({

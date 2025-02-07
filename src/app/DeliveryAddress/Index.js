@@ -7,13 +7,18 @@ import { useSelector } from 'react-redux';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { CgNotes } from 'react-icons/cg';
 import { useTheme } from '@emotion/react';
+import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
 
 console.log("StateList ", stateList);
 function Index() {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
-  const gloablState = useSelector((state)=> state)
-  const [overallList] =useState(gloablState.addCartProduct)
+  // const gloablState = useSelector((state)=> state)
+  const currency = localStorage.getItem("CURRENCY")
+  const cartProducts = useSelector(state => state.cart.cartProducts)
+  console.log("cartProducts ",cartProducts);
+  
+  const [overallList] =useState(cartProducts)
   console.log("overallList ",overallList);
   const [formInputs, setFormInputs] = useState({
     firstName: "",
@@ -50,7 +55,7 @@ function Index() {
         [name]: value,
         [err]: false,
       }))
-      if (value.length === 6) {
+      if (value && value.length === 6) {
         const data = pinCodeList.find((item) => value === item.Pincode)
         console.log("data ", data);
 
@@ -128,17 +133,53 @@ function Index() {
       alert("hii")
       console.log("formInputs ", formInputs);
     }
+    submitApiCallFun()
   }
   
+  const submitApiCallFun=()=>{
+    let totalAmt = 0;
+    overallList.forEach((item) => {
+      totalAmt += item.price * item.quantity
+    })
+    const method = "POST";
+    const url = "create-order";
+    const data = {
+    "amount": totalAmt
+}
+    axiosApiCallFun(method, url, data, "createOrderReq");
+  }
+
+
+  const axiosApiCallFun = async (method, url, data, type) => {
+    try {
+      const response = await HttpRequest({ method, url, data });
+      switch (type) {
+        case "createOrderReq":
+          console.log ("response ",response);
+          
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      // setFormVal((prev) => ({
+      //   ...prev,
+      //   openSnakbar: true,
+      //   openSnakbarType: "error",
+      //   openSnakbarMsg: error.response_message
+      //     ? error.response_message
+      //     : "Something went wrong",
+      // }));
+    }
+  };
+
 
   const billDetailsCardBuild = () => {
     let totalAmt = 0;
-    let currency = "";
     let shipping = 0
     overallList.forEach((item) => {
       console.log("sasdadfd ", item.price * item.quantity);
       totalAmt += item.price * item.quantity
-      currency = item.currency
     })
     return (
       <div className=' mx-4'>

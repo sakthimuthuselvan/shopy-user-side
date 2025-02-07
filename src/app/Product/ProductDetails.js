@@ -17,7 +17,8 @@ const ProductDetails = () => {
   const primaryColor = theme.palette.primary.main;
    const cartProducts = useSelector(state => state.cart.cartProducts)
    console.log("cartProducts ",cartProducts);
-   
+   const currency = localStorage.getItem("CURRENCY")
+
   const dispatch = useDispatch()
 
   const { id } = useParams(); // Accessing the dynamic parameter ":id"
@@ -53,12 +54,9 @@ const { overallDetails } = state;
     const data = {
       "product_id": id
     }
-console.log("data ",data);
-    const encrypted = {
-      data: encrypt(JSON.stringify(data))
-    }
+
     try {
-      const response = await HttpRequest({ method, url, encrypted });
+      const response = await HttpRequest({ method, url, data });
       console.log(response.response_data);
       // const data = {
       //   product_images: [product1, product1],
@@ -150,11 +148,11 @@ console.log("data ",data);
               </div>
               <h6 className='text-grey mt-0'>{overallDetails.messure}</h6>
               <div className='d-flex mt-3'>
-                <h4 className='title'>{overallDetails.currency+" " + overallDetails.price}</h4>
+                <h4 className='title'>{currency+" " + overallDetails.price}</h4>
 
                 {overallDetails.is_offer === 1 ?
 
-                  <h5 className='text-gray mx-3 '><strike>{overallDetails.currency + overallDetails.old_price}</strike></h5>
+                  <h5 className='text-gray mx-3 '><strike>{currency + overallDetails.old_price}</strike></h5>
                   : null
                 }
               </div>
