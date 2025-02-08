@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import { Provider } from "react-redux";
-import store from "./Redux/Store";
+import store, { persistor } from "./Redux/Store";
+import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { green, purple } from "@mui/material/colors";
 import HttpRequest from "./Utilities/ApiCall/HttpRequest";
 import Loader from "./Utilities/Loader/Loader";
 import MySnackbar from "./AlertShow/Alert";
@@ -108,10 +108,13 @@ const Root = () => {
         Object.keys(siteData).length > 0 &&
         changeFavicon(siteData.fav_icon)}
       <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <App />
         </ThemeProvider>
+        </PersistGate>
       </Provider>
     </>
   );

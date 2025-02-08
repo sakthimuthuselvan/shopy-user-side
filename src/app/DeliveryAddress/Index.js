@@ -8,18 +8,15 @@ import { TbTruckDelivery } from 'react-icons/tb';
 import { CgNotes } from 'react-icons/cg';
 import { useTheme } from '@emotion/react';
 import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
+import Loader from "../../Utilities/Loader/Loader";
 
-console.log("StateList ", stateList);
 function Index() {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
-  // const gloablState = useSelector((state)=> state)
   const currency = localStorage.getItem("CURRENCY")
   const cartProducts = useSelector(state => state.cart.cartProducts)
-  console.log("cartProducts ",cartProducts);
-  
-  const [overallList] =useState(cartProducts)
-  console.log("overallList ",overallList);
+
+  const [overallList] = useState(cartProducts)
   const [formInputs, setFormInputs] = useState({
     firstName: "",
     firstNameErr: false,
@@ -38,8 +35,9 @@ function Index() {
     pincode: "",
     pincodeErr: false,
     landMark: "",
-    landMarkErr: false
+    landMarkErr: false,
   })
+  const [showLoader, setShowLoader] = useState(false)
 
   const { firstName, firstNameErr, address1, address1Err, address2, address2Err, district, districtErr, country, countryErr, phoneNumber, phoneNumberErr, state, stateErr, pincode, pincodeErr, landMark, landMarkErr } = formInputs;
 
@@ -57,16 +55,11 @@ function Index() {
       }))
       if (value && value.length === 6) {
         const data = pinCodeList.find((item) => value === item.Pincode)
-        console.log("data ", data);
-
         const stateName = stateList.find((item) => spaceRemoveFun(item.name) === spaceRemoveFun(data.StateName))
-        console.log("stateName ", stateName);
-        console.log("District ", data.District);
-
         setFormInputs((pre) => ({
           ...pre,
           state: stateName,
-          district:data.District
+          district: data.District
         }))
       }
 
@@ -80,7 +73,7 @@ function Index() {
 
   }
 
-  const formSubmit=(event)=>{
+  const formSubmit = (event) => {
     event.preventDefault()
     paySubmitBtnClick()
   }
@@ -135,8 +128,8 @@ function Index() {
     }
     submitApiCallFun()
   }
-  
-  const submitApiCallFun=()=>{
+
+  const submitApiCallFun = () => {
     let totalAmt = 0;
     overallList.forEach((item) => {
       totalAmt += item.price * item.quantity
@@ -144,20 +137,23 @@ function Index() {
     const method = "POST";
     const url = "create-order";
     const data = {
-    "amount": totalAmt,
-    "currency": "INR",
-}
+      "amount": totalAmt,
+      "currency": "INR",
+    }
     axiosApiCallFun(method, url, data, "createOrderReq");
   }
 
 
   const axiosApiCallFun = async (method, url, data, type) => {
+    setShowLoader(true)
     try {
       const response = await HttpRequest({ method, url, data });
       switch (type) {
         case "createOrderReq":
-          console.log ("response ",response);
           createOrderResFun(response)
+          break;
+        case "verifyPaymentReq":
+          verifyPaymentResFun(response)
           break;
         default:
           break;
@@ -176,12 +172,12 @@ function Index() {
   const createOrderResFun = async (data) => {
     // ✅ Load Razorpay Key from `.env` File
     const razorpayKey = process.env.REACT_APP_RAZORPAY_KEY_ID; // Ensure this is set in .env file
-  
+
     if (!razorpayKey) {
-      console.error("Razorpay Key is missing! Set REACT_APP_RAZORPAY_KEY_ID in .env");
+      setShowLoader(false)
       return;
     }
-  
+
     // ✅ Razorpay Payment Options
     const options = {
       key: razorpayKey, // Use the loaded key
@@ -191,12 +187,13 @@ function Index() {
       description: "Test Transaction",
       order_id: data.id,
       handler: function (response) {
-        alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+        setShowLoader(false)
+        orderVerfiyAPiCall(data, response)
       },
       prefill: {
         name: "Sakthi Muthuselvan",
         email: "sakthimsd531@gmail.com",
-        contact: "6382907672",
+        contact: " ",
       },
       method: {
         netbanking: true,
@@ -208,26 +205,37 @@ function Index() {
         color: primaryColor,
       },
     };
-  
-    console.log("Payment Options: ", options);
-  
-    // ✅ Ensure Razorpay Script is Loaded
+
     if (typeof window.Razorpay === "undefined") {
-      console.error("Razorpay SDK not loaded. Make sure it's added in index.html.");
+      setShowLoader(false)
       return;
     }
-  
+
     // ✅ Open Razorpay Payment Window
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
   };
-  
+
+  const orderVerfiyAPiCall = (dataPre, response) => {
+
+    const method = "POST";
+    const url = "verify-payment";
+    const data = {
+      "razorpay_payment_id": response.razorpay_payment_id,
+      "razorpay_order_id": response.razorpay_order_id,
+      "razorpay_signature": response.razorpay_signature,
+      "currency": dataPre.currency,
+      "amount": (dataPre.amount / 100)
+    }
+    axiosApiCallFun(method, url, data, "verifyPaymentReq");
+  }
+
+  const verifyPaymentResFun = () => {
+  }
 
   const billDetailsCardBuild = () => {
     let totalAmt = 0;
-    let shipping = 0
     overallList.forEach((item) => {
-      console.log("sasdadfd ", item.price * item.quantity);
       totalAmt += item.price * item.quantity
     })
     return (
@@ -239,7 +247,7 @@ function Index() {
         </div>
         <div className='d-flex justify-content-between'>
           <p className='m-0'><TbTruckDelivery className='me-2' />Delivery Charge </p>
-          <p style={{color: primaryColor}} className='fw-bold'>Free</p>
+          <p style={{ color: primaryColor }} className='fw-bold'>Free</p>
         </div>
         <div className='d-flex justify-content-between'>
           <p className='m-0 fw-bold'>Grant Total </p>
@@ -249,13 +257,13 @@ function Index() {
     )
   }
 
-  const inputDetailsBuild=()=>{
-    return(
+  const inputDetailsBuild = () => {
+    return (
       <div className='col-lg-8 col-md-12 col-sm-12 p-0'>
-          <div className='jr-card mx-2'>
-            <h2 className='fw-bold mt-3'>Delivery</h2>
-          <form onSubmit={(e)=> formSubmit(e)}>
-          <div className='row'>
+        <div className='jr-card mx-2'>
+          <h2 className='fw-bold mt-3'>Delivery</h2>
+          <form onSubmit={(e) => formSubmit(e)}>
+            <div className='row'>
               <div className='col-lg-12 col-md-12 col-sm-12 mt-3'>
                 {/* <FormLabel className='text-black'>First Name</FormLabel> */}
                 <TextField
@@ -301,7 +309,7 @@ function Index() {
                   fullWidth
                 />
               </div>
-             
+
               <div className='col-lg-12 col-md-12 col-sm-12 mt-3'>
                 <TextField
                   id='landMark'
@@ -397,25 +405,24 @@ function Index() {
                       backgroundColor: 'primary.dark', // Darker shade of primary color on hover
                     },
                   }}
-                 onClick={() => paySubmitBtnClick()}>proceed to pay</Button>
+                  onClick={() => paySubmitBtnClick()}>proceed to pay</Button>
               </div>
 
             </div>
           </form>
-          </div>
         </div>
+      </div>
     )
   }
- 
-  console.log("process.env.RAZORPAY_KEY_ID ",process.env.REACT_APP_RAZORPAY_KEY_ID);
-  
+
   return (
     <div className='light-green'>
+      <Loader open={showLoader} />
       <div className='row mx-1 flex-column-reverse'>
         {inputDetailsBuild()}
         <div className='col-lg-4 mt-2 col-md-12 col-sm-12'>
           <div className='card-fixed col-lg-4 col-md-12 col-sm-12'>
-          {billDetailsCardBuild()}
+            {billDetailsCardBuild()}
           </div>
         </div>
       </div>

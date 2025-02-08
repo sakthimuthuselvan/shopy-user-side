@@ -22,48 +22,6 @@ const dispatch = useDispatch()
   const [skeletonShow, setskeletonShow] = useState()
   const [cartProducts,setCardProducts] = useState(productList)
 
-  useEffect(() => {
-    listApiCall()
-  }, [])
-
-  const listApiCall = async () => {
-    setskeletonShow(true)
-    const method = "Post";
-    const url = "shopy/cart-list";
-    const data = {
-      "user_id": "6587f8b1d07e09ee517b9313",
-      "product_id": ["663f179811d61a935fd6b712"]
-    }
-    try {
-      const response = await HttpRequest({ method, url, data });
-      // const data = {
-      //   product_images: [product1, product1],
-      //   product_name: "Onion (Nattu vengayam)",
-      //   product_type: "vegitable",
-      //   messure: "kg",
-      //   size: 1,
-      //   price: 50,
-      //   is_whishList: 0,
-      //   about_product: "",
-      //   is_offer: 1,
-      //   old_price: 70,
-      //   offer_percentage: 40,
-      //   add_cart: 0,
-      //   currency: "₹",
-      //   suggestion_product: [],
-      //   total_quantity: 0,
-      // }
-      // setState((state) => ({
-      //   ...state,
-      //   overallDetails: data,
-      //   skeletonShow: false
-      // }))
-    } catch (error) {
-
-      console.log(error);
-
-    }
-  }
 
   const skeletonBuild = () => {
     return (
