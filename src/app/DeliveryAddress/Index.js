@@ -144,7 +144,8 @@ function Index() {
     const method = "POST";
     const url = "create-order";
     const data = {
-    "amount": totalAmt
+    "amount": totalAmt,
+    "currency": "INR",
 }
     axiosApiCallFun(method, url, data, "createOrderReq");
   }
@@ -156,7 +157,7 @@ function Index() {
       switch (type) {
         case "createOrderReq":
           console.log ("response ",response);
-          
+          createOrderResFun(response)
           break;
         default:
           break;
@@ -172,7 +173,55 @@ function Index() {
       // }));
     }
   };
-
+  const createOrderResFun = async (data) => {
+    // ✅ Load Razorpay Key from `.env` File
+    const razorpayKey = process.env.REACT_APP_RAZORPAY_KEY_ID; // Ensure this is set in .env file
+  
+    if (!razorpayKey) {
+      console.error("Razorpay Key is missing! Set REACT_APP_RAZORPAY_KEY_ID in .env");
+      return;
+    }
+  
+    // ✅ Razorpay Payment Options
+    const options = {
+      key: razorpayKey, // Use the loaded key
+      amount: data.amount,
+      currency: data.currency,
+      name: "Shopy",
+      description: "Test Transaction",
+      order_id: data.id,
+      handler: function (response) {
+        alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
+      },
+      prefill: {
+        name: "Sakthi Muthuselvan",
+        email: "sakthimsd531@gmail.com",
+        contact: "6382907672",
+      },
+      method: {
+        netbanking: true,
+        card: true,
+        wallet: true,
+        upi: true, // ✅ Enable UPI (Google Pay, PhonePe, Paytm, etc.)
+      },
+      theme: {
+        color: primaryColor,
+      },
+    };
+  
+    console.log("Payment Options: ", options);
+  
+    // ✅ Ensure Razorpay Script is Loaded
+    if (typeof window.Razorpay === "undefined") {
+      console.error("Razorpay SDK not loaded. Make sure it's added in index.html.");
+      return;
+    }
+  
+    // ✅ Open Razorpay Payment Window
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+  
 
   const billDetailsCardBuild = () => {
     let totalAmt = 0;
@@ -357,7 +406,9 @@ function Index() {
         </div>
     )
   }
-
+ 
+  console.log("process.env.RAZORPAY_KEY_ID ",process.env.REACT_APP_RAZORPAY_KEY_ID);
+  
   return (
     <div className='light-green'>
       <div className='row mx-1 flex-column-reverse'>
