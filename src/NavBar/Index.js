@@ -24,7 +24,7 @@ function Index() {
   const location = useLocation()
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
-  const cartProducts = useSelector((state)=> state.cart.cartProducts)
+  const cartProducts = useSelector((state) => state.cart.cartProducts)
   // const [companyName] = useState("Shopy")
   const [state, setState] = useState({
     isClicked: false,
@@ -96,8 +96,12 @@ function Index() {
   }
 
   const addToCardBtnClick = () => {
-    navigate("/add/to/card")
-
+    const token = !!localStorage.getItem("_Auth")
+    if (token) {
+      navigate("/add/to/card")
+    } else {
+      setOpenlogInDialog(true)
+    }
   }
 
   const homeBtnClick = () => {
@@ -116,7 +120,7 @@ function Index() {
       </div>)
   }
 
- const callbackFun = () => {
+  const callbackFun = () => {
     setOpenlogInDialog(false)
   }
   const token = !!localStorage.getItem("_Auth")
@@ -124,8 +128,10 @@ function Index() {
     <div className='nav'>
       <div style={{ backgroundColor: primaryColor }} className={`${location.pathname === "/" ? "full-nav" : "full-nav-10"}  letter-primary`}>
         <div className='nav-content mx-3'>
-          <div className='text-white pointer' onClick={() => homeBtnClick()}>
-            {size !== "sm" && <img src={LogoImg} alt='logo' width={80} height={40} />}
+          <div className='d-none d-md-block text-white pointer' onClick={() => homeBtnClick()}>
+            {/* {size === "lg" && */}
+           <img src={LogoImg} alt='logo' width={80} height={40} /> 
+             {/* } */}
           </div>
 
           {location.pathname === "/" &&
@@ -138,16 +144,16 @@ function Index() {
             </div>}
 
           <div className='box3'>
-            {size === "sm" ?
-              <div>
+            {/* {size === "sm" || size === "md"  ? */}
+              <div className='d-md-none'>
                 <div className='d-flex align-items-center'>
-                  <IconButton onClick={sideBaropen}><MenuIcon sx={{ fontSize: 25 }} className='text-white pr-3' /></IconButton>
-                  <h3 className='text-white pl-4 pt-2' onClick={() => homeBtnClick()}>
+                  {/* <IconButton onClick={sideBaropen}><MenuIcon sx={{ fontSize: 25 }} className='text-white pr-3' /></IconButton> */}
+                  <h3 className='text-white pl-4 pt-2 ml-3' onClick={() => homeBtnClick()}>
                     <img src={LogoImg} alt='THE NATIVE ORGANIC' width={80} height={40} />
 
                   </h3>
                 </div>
-                <div className={`${sideBar ? "sakthi" : ""}`}>
+                {/* <div className={`${sideBar ? "sakthi" : ""}`}>
                   <div className={`slide-layer ${sideBar ? "sidebar-open" : ""}`}>
                     <IconButton onClick={sidebarClose}><CloseIcon style={{ fontSize: "2rem" }} /></IconButton>
                     <div className='pl-2 pt-2'>
@@ -163,16 +169,16 @@ function Index() {
                       <h6 className='item pointer'>Logout</h6>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
-              : null}
+              {/* : null} */}
             <div className='text-white'>
               <IconButton onClick={() => addToCardBtnClick()}>
                 <Badge badgeContent={cartProducts.length} color="error">
                   <ShoppingCartOutlinedIcon className='text-white' sx={{ fontSize: 25 }} />
                 </Badge>
               </IconButton>
-              <IconButton aria-controls={open ? 'demo-positioned-menu' : undefined}
+              {/* <IconButton aria-controls={open ? 'demo-positioned-menu' : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
@@ -181,8 +187,8 @@ function Index() {
                   <FavoriteBorderIcon className='text-white' sx={{ fontSize: 25 }} />
                   {<div className='whishlist-dot bg-danger'></div>}
                 </div>
-              </IconButton>
-              <Button onClick={() => signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button>
+              </IconButton> */}
+              {!token ? <Button onClick={() => signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button> : null}
 
             </div>
           </div>

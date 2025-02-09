@@ -9,10 +9,11 @@ import { CgNotes } from 'react-icons/cg';
 import { useTheme } from '@emotion/react';
 import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
 import Loader from "../../Utilities/Loader/Loader";
-
+import { lightenColor } from '../../Utilities/Util';
 function Index() {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
+  const lightPrimary = lightenColor(theme.palette.primary.main)
   const currency = localStorage.getItem("CURRENCY")
   const cartProducts = useSelector(state => state.cart.cartProducts)
 
@@ -159,6 +160,7 @@ function Index() {
           break;
       }
     } catch (error) {
+      setShowLoader(false)
       // setFormVal((prev) => ({
       //   ...prev,
       //   openSnakbar: true,
@@ -204,6 +206,11 @@ function Index() {
       theme: {
         color: primaryColor,
       },
+      modal: {
+        ondismiss: function () {
+          setShowLoader(false)
+        },
+      },
     };
 
     if (typeof window.Razorpay === "undefined") {
@@ -231,6 +238,7 @@ function Index() {
   }
 
   const verifyPaymentResFun = () => {
+    setShowLoader(false)
   }
 
   const billDetailsCardBuild = () => {
@@ -416,12 +424,12 @@ function Index() {
   }
 
   return (
-    <div className='light-green'>
+    <div style={{backgroundColor: lightPrimary}}>
       <Loader open={showLoader} />
       <div className='row mx-1 flex-column-reverse'>
         {inputDetailsBuild()}
-        <div className='col-lg-4 mt-2 col-md-12 col-sm-12'>
-          <div className='card-fixed col-lg-4 col-md-12 col-sm-12'>
+        <div className=' col-lg-4 mt-2 col-md-12 col-sm-12'>
+          <div className='jr-card card-fixed col-lg-4 col-md-12 col-sm-12'>
             {billDetailsCardBuild()}
           </div>
         </div>
