@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Skeleton } from '@mui/material'
+import { useNavigate } from 'react-router-dom';
 
 const Index = ({ addvertismentData }) => {
   const base_url = process.env.REACT_APP_BASE_URL;
-
+const navigate = useNavigate()
   const [state, setState] = useState({
     overallData: [],
     baseUrl:base_url
@@ -16,6 +17,14 @@ const Index = ({ addvertismentData }) => {
     }))
   }, [addvertismentData])
 
+
+  const adCardClickFun=(data)=>{
+console.log("data ",data);
+if(data.navigate_category){
+  navigate(`categoty/${data.navigate_category}`)
+
+}
+  }
   const { overallData ,baseUrl} = state;
   return (
     <div>
@@ -24,7 +33,7 @@ const Index = ({ addvertismentData }) => {
           <div className='row  p-0 '>
             {overallData.map((item)=>{
               return(
-                <div className='col-lg-4 col-md-4 col-sm-6 col-6 my-2 p-0 px-1'>
+                <div onClick={()=> adCardClickFun(item)} className='col-lg-4 col-md-4 col-sm-6 col-6 my-2 p-0 px-1'>
                 <img src={item.image} alt='Redundant' className='w-100' />
               </div>
               )

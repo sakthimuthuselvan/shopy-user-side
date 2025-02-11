@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Skeleton } from '@mui/material';
 import Slider from "react-slick";
 import WindowWidth from '../../Utilities';
+import { useNavigate } from 'react-router-dom';
 
 const SliderCom = ({ SliderData }) => {
     const base_url = process.env.REACT_APP_BASE_URL;
@@ -10,6 +11,7 @@ const SliderCom = ({ SliderData }) => {
         baseUrl: base_url
 
     })
+    const navigate = useNavigate()
     const { sliderOverall, baseUrl } = state;
     const settings = {
         // dots: true,
@@ -26,6 +28,12 @@ const SliderCom = ({ SliderData }) => {
 
     }, [SliderData])
 
+
+    const sliderItemClick=(data)=>{
+        if(data.navigate_category){
+            navigate(`categoty/${data.navigate_category}`)
+          }
+    }
     const size = WindowWidth()
 
     return (
@@ -36,7 +44,7 @@ const SliderCom = ({ SliderData }) => {
                         <Slider {...settings}>
                             {sliderOverall.length > 0 && sliderOverall.map((item) => {
                                 return (
-                                    <div>
+                                    <div onClick={()=> sliderItemClick(item)}>
                                         <img src={size === "sm" ? item.sm_img :  item.lg_img} className='w-100'/>
                                     </div>
                                 )

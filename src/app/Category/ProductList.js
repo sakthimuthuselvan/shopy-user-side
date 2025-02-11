@@ -37,7 +37,7 @@ const ProductList = () => {
     }
   }
   return (
-    <div>
+    <div className='mx-3 mt-2'>
       <Suspense fallback={<h1> </h1>}><ProductListCom productLists={productsList} /></Suspense>
     </div>
   )

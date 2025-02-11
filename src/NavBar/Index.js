@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import "./nav.css"
 import MenuIcon from '@mui/icons-material/Menu';
 import { Badge, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Menu, MenuItem } from '@mui/material';
@@ -18,6 +18,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import LogoImg from "./logo.png"
 import { useTheme } from '@emotion/react';
 import LogInCom from "../SignIn/SingIn"
+import lodash from "lodash"; // Import lodash
 
 function Index() {
   const navigate = useNavigate()
@@ -33,7 +34,7 @@ function Index() {
     categoryClick: false
   })
   const [openlogInDialog, setOpenlogInDialog] = useState(false)
-
+const [searchVal,setSearchVal] = useState("")
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -132,6 +133,22 @@ function Index() {
   const callbackFun = () => {
     setOpenlogInDialog(false)
   }
+
+  const debouncedSearch = useCallback(
+    lodash.debounce((searchQuery) => {
+      onSearch(searchQuery);
+    }, 500),
+    []
+  );
+const onSearch=(val)=>{
+  console.log("500 ",val);
+  
+}
+  const handleSearchChange=(e)=>{
+    setSearchVal(e.target.value)
+    debouncedSearch(e.target.value); // Trigger debounce on input change
+
+  }
   const token = !!localStorage.getItem("_Auth")
   return (// render()
     <div className='nav'>
@@ -146,10 +163,12 @@ function Index() {
           {location.pathname === "/" &&
             <div className={`searchbar letter-primary bg-btn-primary mt-1`}>
               <div className={`searchBox bg-btn-primary`}>
-                <input className={`nav-search bg-btn-primary letter-primary`} placeholder='search product' />
+                <input onChange={(e)=> handleSearchChange(e)} className={`nav-search bg-btn-primary letter-primary fs-13`} placeholder='search product' />
               </div>
-              <HighlightOffIcon className={`icon pointer`} sx={{ fontSize: 15, marginRight: 2 }} />
+              <div>
+              <HighlightOffIcon className={`icon pointer`} sx={{ fontSize: 15, marginRight: 0}} />
               <IconButton> <SearchIcon className={`icon`} sx={{ fontSize: 25 }} /></IconButton>
+              </div>
             </div>}
 
           <div className='box3'>
@@ -162,23 +181,6 @@ function Index() {
 
                   </h3>
                 </div>
-                {/* <div className={`${sideBar ? "sakthi" : ""}`}>
-                  <div className={`slide-layer ${sideBar ? "sidebar-open" : ""}`}>
-                    <IconButton onClick={sidebarClose}><CloseIcon style={{ fontSize: "2rem" }} /></IconButton>
-                    <div className='pl-2 pt-2'>
-                      <h6 className='item pointer' onClick={categoryClickFun}>category {categoryClick ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}</h6>
-                      {categoryClick ?
-                        <div style={{ marginLeft: 30 }}>
-                          <h6 className='drop-down pointer'>sakthi</h6>
-                          <h6 className='drop-down pointer'>sakthi</h6>
-                          <h6 className=' drop-down pointer'>sakthi</h6>
-                          <h6 className='drop-down pointer'>sakthi</h6>
-                        </div> : null}
-                      <h6 className='item pointer'>Whish List</h6>
-                      <h6 className='item pointer'>Logout</h6>
-                    </div>
-                  </div>
-                </div> */}
               </div>
               {/* : null} */}
             <div className='text-white'>
