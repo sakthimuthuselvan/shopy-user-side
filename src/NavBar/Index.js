@@ -112,6 +112,15 @@ function Index() {
     setOpenlogInDialog(true)
 
   }
+  const signOutBtnClick = () => {
+    try {
+      localStorage.removeItem("_Auth");
+      window.location.reload(); // Corrected reload method
+    } catch (err) {
+      console.error("Error during sign out:", err); // Logs error if something fails
+    }
+  };
+  
 
   const loginDialogBuild = () => {
     return (
@@ -188,7 +197,9 @@ function Index() {
                   {<div className='whishlist-dot bg-danger'></div>}
                 </div>
               </IconButton> */}
-              {!token ? <Button onClick={() => signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button> : null}
+              {!token ? <Button onClick={() => signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button> : 
+              
+              <Button onClick={() => signOutBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Logout</Button>}
 
             </div>
           </div>

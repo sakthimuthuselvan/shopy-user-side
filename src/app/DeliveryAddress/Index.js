@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import "./style.scss"
 import { Autocomplete, Button, FormControl, FormLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material'
 import stateList from "../../JsonList/StateList/Index.json";
-import pinCodeList from "../../JsonList/StateList/pincode.json";
 import { useSelector } from 'react-redux';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { CgNotes } from 'react-icons/cg';
@@ -54,15 +53,15 @@ function Index() {
         [name]: value,
         [err]: false,
       }))
-      if (value && value.length === 6) {
-        const data = pinCodeList.find((item) => value === item.Pincode)
-        const stateName = stateList.find((item) => spaceRemoveFun(item.name) === spaceRemoveFun(data.StateName))
-        setFormInputs((pre) => ({
-          ...pre,
-          state: stateName,
-          district: data.District
-        }))
-      }
+      // if (value && value.length === 6) {
+      //   const data = pinCodeList.find((item) => value === item.Pincode)
+      //   const stateName = stateList.find((item) => spaceRemoveFun(item.name) === spaceRemoveFun(data.StateName))
+      //   setFormInputs((pre) => ({
+      //     ...pre,
+      //     state: stateName,
+      //     district: data.District
+      //   }))
+      // }
 
     } else {
       setFormInputs((pre) => ({
