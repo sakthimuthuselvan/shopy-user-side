@@ -149,6 +149,11 @@ const onSearch=(val)=>{
     debouncedSearch(e.target.value); // Trigger debounce on input change
 
   }
+
+  const searchValClear=()=>{
+    setSearchVal("")
+  }
+
   const token = !!localStorage.getItem("_Auth")
   return (// render()
     <div className='nav'>
@@ -161,15 +166,27 @@ const onSearch=(val)=>{
           </div>
 
           {location.pathname === "/" &&
-            <div className={`searchbar letter-primary bg-btn-primary mt-1`}>
+            <div className='position-relative'>
+              <div className={`searchbar letter-primary bg-btn-primary mt-1`}>
               <div className={`searchBox bg-btn-primary`}>
-                <input onChange={(e)=> handleSearchChange(e)} className={`nav-search bg-btn-primary letter-primary fs-13`} placeholder='search product' />
+                <input 
+                value={searchVal}
+                onChange={(e)=> handleSearchChange(e)} className={`nav-search bg-btn-primary letter-primary fs-13`} placeholder='search product' />
               </div>
               <div>
-              <HighlightOffIcon className={`icon pointer`} sx={{ fontSize: 15, marginRight: 0}} />
+              {searchVal.length > 0 && <HighlightOffIcon onClick={()=> searchValClear()} className={`icon pointer`} sx={{ fontSize: 15, marginRight: 0}} />}
               <IconButton> <SearchIcon className={`icon`} sx={{ fontSize: 25 }} /></IconButton>
               </div>
+            </div>
+           
+           {searchVal.length > 2 && <div className='search-dropdown'>
+              <div className='drop-suggestion'>ssakthi</div>
+              <div className='drop-suggestion'>ssakthi</div>
+              <div className='drop-suggestion'>ssakthi</div>
             </div>}
+            </div>
+            
+            }
 
           <div className='box3'>
             {/* {size === "sm" || size === "md"  ? */}

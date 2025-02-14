@@ -63,6 +63,27 @@
     display: flex;
 }
 
+.search-dropdown{
+    width: 100%;
+    background-color: white;
+    padding: 5px;
+    position: absolute;
+    border-radius: 10px;
+    margin-top: 5px;
+    z-index: 100;
+    max-height: 200px;
+
+}
+.search-dropdown .drop-suggestion{
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+.search-dropdown .drop-suggestion:hover{
+background-color: rgb(226, 226, 226);
+
+}
+
 .slide-layer{
     position: absolute;
     width: 60%;
