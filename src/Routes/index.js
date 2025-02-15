@@ -6,6 +6,7 @@ const AddtoCard = React.lazy(() => import('../app/AddtoCard/Index'))
 const wishList = React.lazy(() => import('../app/wishList/Index'))
 const deliveryDetail = React.lazy(() => import('../app/DeliveryAddress/Index'))
 const categoryProducts = React.lazy(() => import('../app/Category/ProductList'))
+const  SearchProduct = React.lazy(() => import('../app/SearchProduct/index'))
 
 const RouteList = [
     { path: "/", component: overview },
@@ -13,7 +14,9 @@ const RouteList = [
     { path: "/add/to/card", component: AddtoCard },
     { path: "/wish-list", component: wishList },
     { path: "/delivery/details", component: deliveryDetail },
-    { path: "/categoty/:id", component: categoryProducts }
+    { path: "/categoty/:id", component: categoryProducts },
+    { path: "/search/products", component: SearchProduct }
+
 ]
 
 export default RouteList;

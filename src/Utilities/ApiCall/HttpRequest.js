@@ -7,7 +7,7 @@ const HttpRequest = async ({ method, url, data }) => {
     const token = localStorage.getItem('Auth');
     const response = await axios({
       method: method,
-      url: `http://localhost:4000/${url}`, // Assuming you want to use the base URL
+      url: `https://0p055xm8-4000.inc1.devtunnels.ms/${url}`, // Assuming you want to use the base URL
       data: data,
       headers: {
         Authorization: `Bearer ${token}`,
