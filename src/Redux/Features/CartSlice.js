@@ -32,9 +32,16 @@ const cartSlice = createSlice({
       // Filter out the product with the given ID from the cart
       state.cartProducts = action.payload
     },
+
+    removeAllProducts: (state, action) => {
+      const product = action.payload;
+
+      // Filter out the product with the given ID from the cart
+      state.cartProducts = []
+    },
   },
 });
 
 // Export the actions and reducer
-export const { addToCart, removeFromCart, updatedCartProducts } = cartSlice.actions;
+export const { addToCart, removeFromCart, updatedCartProducts, removeAllProducts } = cartSlice.actions;
 export default cartSlice.reducer;

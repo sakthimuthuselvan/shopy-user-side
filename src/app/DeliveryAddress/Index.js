@@ -1,21 +1,24 @@
 import React, { useState } from 'react'
 import "./style.scss"
-import { Autocomplete, Button, FormControl, FormLabel, InputLabel, MenuItem, Select, TextField } from '@mui/material'
+import { Autocomplete, Button, FormControl, FormLabel, InputLabel, MenuItem, Radio, Select, TextField } from '@mui/material'
 import stateList from "../../JsonList/StateList/Index.json";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { TbTruckDelivery } from 'react-icons/tb';
 import { CgNotes } from 'react-icons/cg';
 import { useTheme } from '@emotion/react';
 import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
 import Loader from "../../Utilities/Loader/Loader";
 import { lightenColor } from '../../Utilities/Util';
+import { removeAllProducts } from '../../Redux/Features/CartSlice';
+import { useNavigate } from 'react-router-dom';
 function Index() {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
   const lightPrimary = lightenColor(theme.palette.primary.main)
   const currency = localStorage.getItem("CURRENCY")
   const cartProducts = useSelector(state => state.cart.cartProducts)
-
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [overallList] = useState(cartProducts)
   const [formInputs, setFormInputs] = useState({
     firstName: "",
@@ -38,13 +41,10 @@ function Index() {
     landMarkErr: false,
   })
   const [showLoader, setShowLoader] = useState(false)
+  const [selectedValue, setSelectedValue] = useState(1); // Track selected radio
+  const [showNext, setShowNext] = useState(false); // Track selected radio
 
   const { firstName, firstNameErr, address1, address1Err, address2, address2Err, district, districtErr, country, countryErr, phoneNumber, phoneNumberErr, state, stateErr, pincode, pincodeErr, landMark, landMarkErr } = formInputs;
-
-  const spaceRemoveFun = (name) => {
-    let space_remove = name.split(" ").join("").toLowerCase()
-    return space_remove
-  }
 
   const handleChange = (name, err, value) => {
     if (name === "pincode") {
@@ -53,16 +53,6 @@ function Index() {
         [name]: value,
         [err]: false,
       }))
-      // if (value && value.length === 6) {
-      //   const data = pinCodeList.find((item) => value === item.Pincode)
-      //   const stateName = stateList.find((item) => spaceRemoveFun(item.name) === spaceRemoveFun(data.StateName))
-      //   setFormInputs((pre) => ({
-      //     ...pre,
-      //     state: stateName,
-      //     district: data.District
-      //   }))
-      // }
-
     } else {
       setFormInputs((pre) => ({
         ...pre,
@@ -123,10 +113,11 @@ function Index() {
       }))
       document.getElementById("district").focus()
     } else {
-      alert("hii")
-      console.log("formInputs ", formInputs);
+      setShowNext(true)
+      // alert("hii")
+      // console.log("formInputs ", formInputs);
     }
-    submitApiCallFun()
+
   }
 
   const submitApiCallFun = () => {
@@ -185,16 +176,16 @@ function Index() {
       amount: data.amount,
       currency: data.currency,
       name: "Shopy",
-      description: "Test Transaction",
+      description: "",
       order_id: data.id,
       handler: function (response) {
         setShowLoader(false)
         orderVerfiyAPiCall(data, response)
       },
       prefill: {
-        name: "Sakthi Muthuselvan",
-        email: "sakthimsd531@gmail.com",
-        contact: " ",
+        name: firstName,
+        email: "",
+        contact: phoneNumber,
       },
       method: {
         netbanking: true,
@@ -227,6 +218,7 @@ function Index() {
     const method = "POST";
     const url = "verify-payment";
     const data = {
+      "payment_type": 1,
       "razorpay_payment_id": response.razorpay_payment_id,
       "razorpay_order_id": response.razorpay_order_id,
       "razorpay_signature": response.razorpay_signature,
@@ -238,6 +230,8 @@ function Index() {
 
   const verifyPaymentResFun = () => {
     setShowLoader(false)
+    navigate("/")
+    dispatch(removeAllProducts())
   }
 
   const billDetailsCardBuild = () => {
@@ -391,16 +385,24 @@ function Index() {
 
               <div className='col-lg-6 col-md-12 col-sm-12 mt-3'>
                 <TextField
-                  id='phoneNumber'
-                  type='number'
-                  onChange={(e) => handleChange("phoneNumber", "phoneNumberErr", e.target.value)}
-                  variant='outlined'
+                  id="phoneNumber"
+                  type="text" // Change to text to respect maxLength
+                  onChange={(e) => {
+                    if (/^\d{0,10}$/.test(e.target.value)) {
+                      handleChange("phoneNumber", "phoneNumberErr", e.target.value);
+                    }
+                  }}
+                  variant="outlined"
                   label="Phone Number"
                   value={phoneNumber}
                   error={phoneNumberErr}
+                  inputProps={{
+                    maxLength: 10, // Now works correctly
+                  }}
                   fullWidth
                   required
                 />
+
               </div>
 
               <div className='d-flex justify-content-end mt-3'>
@@ -422,11 +424,89 @@ function Index() {
     )
   }
 
+  const handleChangeRadioButton = (val) => {
+    setSelectedValue(val); // Update state when selection changes
+  };
+
+
+  const paymentMethodHtmlBuild = () => {
+    return (
+      <div className='col-lg-6 col-md-12 col-sm-12'>
+        <div className="jr-card">
+          <span onClick={() => handleChangeRadioButton(2)}>
+            <Radio
+              color="primary"
+              checked={selectedValue === 2} // Ensure correct radio is selected
+              // onChange={(e)=> handleChangeRadioButton(e, 2)}
+              value="a"
+              name="radio-buttons"
+              inputProps={{ "aria-label": "A" }}
+            />
+            Cash On Delivery
+          </span>
+
+          <div>
+            <span onClick={() => handleChangeRadioButton(1)}>
+              <Radio
+                color="primary"
+                checked={selectedValue === 1} // Ensure correct radio is selected
+                // onChange={(e)=> handleChangeRadioButton(e, 1)}
+                value="b"
+                name="radio-buttons"
+                inputProps={{ "aria-label": "B" }}
+              />
+              Pay by UPI and Cards</span>
+          </div>
+        </div>
+
+        <div className='d-flex justify-content-end'>
+          <Button onClick={()=> backBtnClick()} variant='contained' size='samll' color='secondary' className='me-2'>Back</Button>
+
+          <Button onClick={() => proceedToPayCall()} variant='contained' size='samll' color='primary'>Proceed Pay</Button>
+
+        </div>
+
+      </div>
+    )
+  }
+
+  const backBtnClick=()=>{
+    setShowNext(false)
+  }
+  const proceedToPayCall = () => {
+    if (selectedValue === 1) {
+      submitApiCallFun()
+    }else{
+    cashOnDeliveryApiCall()
+    }
+  }
+
+  const cashOnDeliveryApiCall=()=>{
+    
+     const method = "POST";
+    const url = "verify-payment";
+    let totalAmt = 0;
+    overallList.forEach((item) => {
+      totalAmt += item.price * item.quantity
+    })
+    const data = {
+      "user_id":"67a77440710ab222b897e1a8",
+      "payment_type": 2,
+      "currency": currency,
+      "amount": totalAmt
+    }
+    axiosApiCallFun(method, url, data, "verifyPaymentReq");
+  }
   return (
-    <div style={{backgroundColor: lightPrimary}}>
+    <div style={{ backgroundColor: lightPrimary, height: "" }} className=''>
       <Loader open={showLoader} />
       <div className='row mx-1 flex-column-reverse'>
-        {inputDetailsBuild()}
+        {showNext === false ?
+          inputDetailsBuild()
+          :
+          paymentMethodHtmlBuild()
+        }
+
         <div className=' col-lg-4 mt-2 col-md-12 col-sm-12'>
           <div className='jr-card card-fixed col-lg-4 col-md-12 col-sm-12'>
             {billDetailsCardBuild()}

@@ -26,7 +26,7 @@ function AppContent() {
   }
 
   return (
-    <div style={{ overflow: "hidden", marginTop: currentRoute !== "/" ? 90 : 90 }} className={`${currentRoute !== "/" ? "sm-margin-another-page" : 'sm-margin-top'} position-relative`}>
+    <div style={{ overflow: "hidden", marginTop: currentRoute !== "/" ? 90 : 90 }} className={`${currentRoute !== "/" ? "sm-margin-another-page" : 'sm-margin-top'} position-relative h-100`}>
       <Routes>
         {
           RouteList.map(({ path, component: Component }, index) => {
