@@ -7,6 +7,7 @@ const wishList = React.lazy(() => import('../app/wishList/Index'))
 const deliveryDetail = React.lazy(() => import('../app/DeliveryAddress/Index'))
 const categoryProducts = React.lazy(() => import('../app/Category/ProductList'))
 const  SearchProduct = React.lazy(() => import('../app/SearchProduct/index'))
+const  NotFoundPage = React.lazy(() => import('../ErrorCom/404Page'))
 
 const RouteList = [
     { path: "/", component: overview },
@@ -15,7 +16,8 @@ const RouteList = [
     { path: "/wish-list", component: wishList },
     { path: "/delivery/details", component: deliveryDetail },
     { path: "/categoty/:id", component: categoryProducts },
-    { path: "/search/products", component: SearchProduct }
+    { path: "/search/products", component: SearchProduct },
+    { path: "*", component: NotFoundPage }
 
 ]
 

@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import "./App.css";
 import "./custom.scss";
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import NavBar from "./NavBar/Index";
 import RouteList from "./Routes/index";
 import Loader from '../src/Utilities/Loader/Loader';
@@ -26,7 +26,11 @@ function AppContent() {
   }
 
   return (
-    <div style={{ overflow: "hidden", marginTop: currentRoute !== "/" ? 90 : 90 }} className={`${currentRoute !== "/" ? "sm-margin-another-page" : 'sm-margin-top'} position-relative h-100`}>
+    <div style={{ overflow: "hidden"
+  }} 
+    // className={`${currentRoute !== "/" ? "sm-margin-another-page" : currentRoute === "*" ? "" :'sm-margin-top'} position-relative h-100`}
+   className='position-relative h-100'
+   >
       <Routes>
         {
           RouteList.map(({ path, component: Component }, index) => {
@@ -37,7 +41,7 @@ function AppContent() {
         }
       </Routes>
 
-      {currentRoute !== "/add/to/card" && currentRoute !== "/delivery/details" && cartProducts.length > 0 && <div style={{ bottom: 10, }} className='d-md-none position-fixed  w-100'>
+      {/* {currentRoute !== "*"|| (currentRoute !== "/add/to/card" && currentRoute !== "/delivery/details" && cartProducts.length > 0) && <div style={{ bottom: 10, }} className='d-md-none position-fixed  w-100'>
         <div onClick={() => bottomBtnCLick()} style={{ backgroundColor: primaryColor }} className='rounded p-2 mb-2 mx-3 text-white fs-12' >
           <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex align-items-center'>
@@ -46,7 +50,6 @@ function AppContent() {
               </div>
               <div>
                 <div className='fw-bold'>{cartProducts.length} items</div>
-                {/* <div>{currency} {totalPriceGetFun()}</div> */}
               </div>
             </div>
             <div className='fw-bold fs-16'>
@@ -54,7 +57,7 @@ function AppContent() {
             </div>
           </div>
         </div>
-      </div>}
+      </div>} */}
     </div>
   );
 }
@@ -62,7 +65,7 @@ function AppContent() {
 function App() {
   return (
     <BrowserRouter>
-      <NavBar />
+     <NavBar />
       <AppContent />
     </BrowserRouter>
   );

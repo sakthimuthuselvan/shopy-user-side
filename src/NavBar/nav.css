@@ -1,5 +1,6 @@
 .nav {
     position: relative;
+    margin-bottom: 100px;
 }
 .full-nav {
     width: 100vw;
@@ -8,21 +9,35 @@
     align-items: center;
     position: fixed;
     top: 0;
-    margin-bottom: 10vh;
     z-index: 1000;
 }
-.full-nav-10 {
+
+.nav-another-route {
+    position: relative;
+    margin-bottom: 100px;
+}
+.full-nav-another-route {
     width: 100vw;
-    height: 90px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+/* .full-nav-10 {
+    width: 100vw;
+    height: 100px;
     display: flex;
     align-items: center;
     position: fixed;
     top: 0;
     margin-bottom: 10vh;
     z-index: 1000;
-}
+} */
 .nav-content{
-    margin: 0 5vw;  
+    /* margin: 0 5vw;   */
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -76,13 +91,13 @@
 }
 .no-data-found{
     width: 100%;
-    background-color: white;
-    padding: 10px;
-    position: absolute;
-    border-radius: 10px;
+    /* background-color: white; */
+     padding: 10px;
+   /* position: absolute; */
+    /* border-radius: 10px; */
     margin-top: 5px;
-    z-index: 100;
-    max-height: 200px;
+    /* z-index: 100; */
+    /* max-height: 200px; */
     font-size: 13px;
     text-align: center;
     color: gray;
@@ -157,30 +172,40 @@ background-color: rgb(226, 226, 226);
         display: flex;
         justify-content: space-between;
     }
-    .full-nav {
+    /* .full-nav {
         height: 130px;
+    } */
+ 
+}
+
+@media only screen and (max-width: 450px) {
+
+    .nav {
+        position: relative;
+        margin-bottom: 130px;
     }
-    .full-nav-15 {
-        /* height: 15vh; */
-    }
-    .full-nav-10 {
-        /* width: 100vw;
-        height: 10vh;
+    .full-nav {
+        width: 100vw;
+        height: 130px;
         display: flex;
         align-items: center;
         position: fixed;
         top: 0;
-        margin-bottom: 10vh;
-        z-index: 1000; */
+        z-index: 1000;
     }
-}
 
-@media only screen and (max-width: 376px) {
-
-    .full-nav {
-        /* height: 20vh;
-        padding-top: 0px !important; */
-   
+    .nav-another-route {
+        position: relative;
+        margin-bottom: 100px;
+    }
+    .full-nav-another-route {
+        width: 100vw;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        z-index: 1000;
     }
 }
 

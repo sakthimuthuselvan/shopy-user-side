@@ -160,14 +160,16 @@ function Index() {
 
   }
   const token = !!localStorage.getItem("_Auth")
+  console.log("location.pathname ",location.pathname);
+  
+  
   return (// render()
-    <div className='nav'>
-      <div style={{ backgroundColor: primaryColor }} className={`${location.pathname === "/" ? "full-nav" : "full-nav-10"}  letter-primary`}>
+    <div className={location.pathname === "/" ? 'nav' : "nav-another-route"}>
+      <div style={{ backgroundColor: primaryColor }} className={`${location.pathname === "/" ? "full-nav" :"full-nav-another-route" } letter-primary`}>
+       
         <div className='nav-content mx-3'>
           <div className='d-none d-md-block text-white pointer' onClick={() => homeBtnClick()}>
-            {/* {size === "lg" && */}
             <img src={LogoImg} alt='logo' width={80} height={40} />
-            {/* } */}
           </div>
 
           {location.pathname === "/" &&
@@ -202,17 +204,14 @@ function Index() {
           }
 
           <div className='box3'>
-            {/* {size === "sm" || size === "md"  ? */}
             <div className='d-md-none'>
               <div className='d-flex align-items-center'>
-                {/* <IconButton onClick={sideBaropen}><MenuIcon sx={{ fontSize: 25 }} className='text-white pr-3' /></IconButton> */}
                 <h3 className='text-white pl-4 pt-2 ml-3' onClick={() => homeBtnClick()}>
                   <img src={LogoImg} alt='THE NATIVE ORGANIC' width={80} height={40} />
 
                 </h3>
               </div>
             </div>
-            {/* : null} */}
             <div className='text-white'>
               <IconButton onClick={() => addToCardBtnClick()}>
                 <Badge badgeContent={cartProducts.length} color="error">
@@ -222,9 +221,10 @@ function Index() {
               {!token ? <Button onClick={() => signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button> :
 
                 <Button onClick={() => signOutBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Logout</Button>}
-
             </div>
           </div>
+
+
         </div>
       </div>
 
