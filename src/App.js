@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import "./App.css";
 import "./custom.scss";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
@@ -11,6 +11,8 @@ import { useTheme } from '@emotion/react';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { lightenColor } from './Utilities/Util';
+import LogInCom from "../src/SignIn/SingIn"
+
 function AppContent() {
   const currentRoute = useCurrentRoute();
   const theme = useTheme();
@@ -19,12 +21,31 @@ function AppContent() {
   const cartProducts = useSelector(state => state.cart.cartProducts)
   const navigate = useNavigate()
 
-
+const [openlogInDialog, setOpenlogInDialog]=useState(false)
 
   const bottomBtnCLick = () => {
-    navigate("/add/to/card")
+    // navigate("/add/to/card")
+
+
+    const token = !!localStorage.getItem("_Auth")
+    if (token) {
+      navigate("/add/to/card")
+      // setSearchVal("")
+    } else {
+      setOpenlogInDialog(true)
+      // setSearchVal("")
+    }
   }
 
+  const loginDialogBuild = () => {
+    return (
+      <div>
+        <LogInCom loginPageCallBack={callbackFun} />
+      </div>)
+  }
+  const callbackFun = () => {
+    setOpenlogInDialog(false)
+  }
   return (
     <div style={{ overflow: "hidden"
   }} 
@@ -41,7 +62,7 @@ function AppContent() {
         }
       </Routes>
 
-      {/* {currentRoute !== "*"|| (currentRoute !== "/add/to/card" && currentRoute !== "/delivery/details" && cartProducts.length > 0) && <div style={{ bottom: 10, }} className='d-md-none position-fixed  w-100'>
+      {(currentRoute !== "/add/to/card" && currentRoute !== "/delivery/details" && cartProducts.length > 0) && <div style={{ bottom: 10, }} className='d-md-none position-fixed  w-100'>
         <div onClick={() => bottomBtnCLick()} style={{ backgroundColor: primaryColor }} className='rounded p-2 mb-2 mx-3 text-white fs-12' >
           <div className='d-flex justify-content-between align-items-center'>
             <div className='d-flex align-items-center'>
@@ -57,16 +78,22 @@ function AppContent() {
             </div>
           </div>
         </div>
-      </div>} */}
+      </div>}
+            {openlogInDialog && loginDialogBuild()}
+
     </div>
   );
 }
+
+
+
 
 function App() {
   return (
     <BrowserRouter>
      <NavBar />
       <AppContent />
+
     </BrowserRouter>
   );
 }

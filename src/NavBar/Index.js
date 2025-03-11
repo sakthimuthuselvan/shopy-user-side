@@ -12,6 +12,7 @@ import { useTheme } from '@emotion/react';
 import LogInCom from "../SignIn/SingIn"
 import lodash from "lodash"; // Import lodash
 import HttpRequest from '../Utilities/ApiCall/HttpRequest';
+import { removeUserData } from '../Utilities/Util';
 
 function Index() {
   const navigate = useNavigate()
@@ -95,6 +96,7 @@ function Index() {
   const signOutBtnClick = () => {
     try {
       localStorage.removeItem("_Auth");
+      removeUserData()
       window.location.reload(); // Corrected reload method
     } catch (err) {
       console.error("Error during sign out:", err); // Logs error if something fails
@@ -213,7 +215,7 @@ function Index() {
               </div>
             </div>
             <div className='text-white'>
-              <IconButton onClick={() => addToCardBtnClick()}>
+              <IconButton onClick={() => cartProducts.length > 0 ? addToCardBtnClick() : null}>
                 <Badge badgeContent={cartProducts.length} color="error">
                   <ShoppingCartOutlinedIcon className='text-white' sx={{ fontSize: 25 }} />
                 </Badge>

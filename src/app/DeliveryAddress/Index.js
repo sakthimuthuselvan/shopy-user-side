@@ -8,7 +8,7 @@ import { CgNotes } from 'react-icons/cg';
 import { useTheme } from '@emotion/react';
 import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
 import Loader from "../../Utilities/Loader/Loader";
-import { lightenColor } from '../../Utilities/Util';
+import { getUserData, lightenColor } from '../../Utilities/Util';
 import { removeAllProducts } from '../../Redux/Features/CartSlice';
 import { useNavigate } from 'react-router-dom';
 function Index() {
@@ -40,7 +40,12 @@ function Index() {
     landMark: "",
     landMarkErr: false,
   })
-  const [showLoader, setShowLoader] = useState(false)
+  const [showLoader, setShowLoader] = useState(false);
+  const [alertData, setAlertData] = useState({
+    openSnakbar: false,
+    openSnakbarType: "error",
+    openSnakbarMsg: "",
+  });
   const [selectedValue, setSelectedValue] = useState(1); // Track selected radio
   const [showNext, setShowNext] = useState(false); // Track selected radio
 
@@ -81,7 +86,7 @@ function Index() {
         address1Err: true
       }))
       document.getElementById("address1").focus()
-    } else if (!pincode) {
+    } else if (!pincode || pincode.length < 6) {
       setFormInputs((pre) => ({
         ...pre,
         pincodeErr: true
@@ -106,7 +111,7 @@ function Index() {
         districtErr: true
       }))
       document.getElementById("district").focus()
-    } else if (!phoneNumber) {
+    } else if (!phoneNumber || phoneNumber.length < 10) {
       setFormInputs((pre) => ({
         ...pre,
         phoneNumberErr: true
@@ -114,8 +119,6 @@ function Index() {
       document.getElementById("district").focus()
     } else {
       setShowNext(true)
-      // alert("hii")
-      // console.log("formInputs ", formInputs);
     }
 
   }
@@ -151,14 +154,14 @@ function Index() {
       }
     } catch (error) {
       setShowLoader(false)
-      // setFormVal((prev) => ({
-      //   ...prev,
-      //   openSnakbar: true,
-      //   openSnakbarType: "error",
-      //   openSnakbarMsg: error.response_message
-      //     ? error.response_message
-      //     : "Something went wrong",
-      // }));
+      setAlertData((prev) => ({
+        ...prev,
+        openSnakbar: true,
+        openSnakbarType: "error",
+        openSnakbarMsg: error.response_message
+          ? error.response_message
+          : "Something went wrong",
+      }));
     }
   };
   const createOrderResFun = async (data) => {
@@ -214,10 +217,10 @@ function Index() {
   };
 
   const orderVerfiyAPiCall = (dataPre, response) => {
-
     const method = "POST";
     const url = "verify-payment";
     const data = {
+      "user_id": getUserData() && getUserData().user_id ? getUserData().user_id : "",
       "payment_type": 1,
       "razorpay_payment_id": response.razorpay_payment_id,
       "razorpay_order_id": response.razorpay_order_id,
@@ -490,7 +493,7 @@ function Index() {
       totalAmt += item.price * item.quantity
     })
     const data = {
-      "user_id":"67a77440710ab222b897e1a8",
+      "user_id": getUserData() && getUserData().user_id ? getUserData().user_id : "",
       "payment_type": 2,
       "currency": currency,
       "amount": totalAmt
@@ -498,12 +501,13 @@ function Index() {
     axiosApiCallFun(method, url, data, "verifyPaymentReq");
   }
   return (
-    <div style={{ backgroundColor: lightPrimary, height: "" }} className=''>
+    <div style={{ backgroundColor: lightPrimary }} className='vh-100'>
       <Loader open={showLoader} />
       <div className='row mx-1 flex-column-reverse'>
-        {showNext === false ?
-          inputDetailsBuild()
-          :
+        {
+        // showNext === false ?
+        //   inputDetailsBuild()
+        //   :
           paymentMethodHtmlBuild()
         }
 

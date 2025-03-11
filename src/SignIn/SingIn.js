@@ -19,12 +19,14 @@ import OtpCom from '../OtpCom/OtpCom';
 import ResetPassword from "../ResetPssword/ResetPassword"
 import { useSelector } from 'react-redux'
 import { encrypt } from '../Utilities/Util';
+import { useNavigate } from 'react-router-dom';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 function SignIn(props) {
     const theme = useTheme();  // Access the current theme
     const primaryColor = theme.palette.primary.main;  // Get the primary color
+    const navigate = useNavigate()
     const [state, setState] = useState({
         email: "",
         password: "",
@@ -116,21 +118,29 @@ function SignIn(props) {
         const response = HttpRequest({ method, url, data });
         response
             .then((res) => {
+              
                 const message = res.response_message ? res.response_message : ""
                 const isToken = res.data && res.data.token ? res.data.token : ""
+                let user_data = {
+                    "user_id": res.data && res.data.user_id ? res.data.user_id : "",
+                    "email": email
+                }
                 localStorage.setItem("_Auth", isToken)
+                localStorage.setItem("_Uset", JSON.stringify(user_data))
+
                 setState({
                     ...state,
                     showLoader: false,
                     openDialog: false,
-                    openSnackbar: true,
-                    snackType: "success",
-                    snackMessage: message
+                    // openSnackbar: true,
+                    // snackType: "success",
+                    // snackMessage: message
                 })
                 const token = !!localStorage.getItem("_Auth")
                 if (token) {
                     dispatch({ type: "Auth" })
                 }
+                navigate("add/to/card")
             }).catch((err) => {
 
                 setState({

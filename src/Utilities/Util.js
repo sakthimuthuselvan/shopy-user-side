@@ -26,3 +26,13 @@ export const  lightenColor=(hex, percent = 0.9)=> {
 
     return `rgb(${r}, ${g}, ${b})`;
 }
+
+
+export const getUserData = ()=> {
+    const data = localStorage.getItem("_Uset");
+    return data ? JSON.parse(data) : null;
+  }; 
+
+  export const removeUserData = () => {
+    localStorage.removeItem("_Uset");
+  };
