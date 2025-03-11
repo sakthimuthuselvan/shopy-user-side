@@ -13,6 +13,8 @@ import LogInCom from "../SignIn/SingIn"
 import lodash from "lodash"; // Import lodash
 import HttpRequest from '../Utilities/ApiCall/HttpRequest';
 import { removeUserData } from '../Utilities/Util';
+import ShoppingBagIcon from '@mui/icons-material/ShoppingBagOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 function Index() {
   const navigate = useNavigate()
@@ -149,26 +151,26 @@ function Index() {
     setProductList([])
   }
 
-  const categorySearchValClick=(data)=>{
+  const categorySearchValClick = (data) => {
     navigate(`categoty/${data._id}`)
     setSearchVal("")
   }
 
-  const productDataClick=(data)=>{
-   navigate("search/products",{
-    state: data
-   })
-   setSearchVal("")
+  const productDataClick = (data) => {
+    navigate("search/products", {
+      state: data
+    })
+    setSearchVal("")
 
   }
   const token = !!localStorage.getItem("_Auth")
-  console.log("location.pathname ",location.pathname);
-  
-  
+  console.log("location.pathname ", location.pathname);
+
+
   return (// render()
     <div className={location.pathname === "/" ? 'nav' : "nav-another-route"}>
-      <div style={{ backgroundColor: primaryColor }} className={`${location.pathname === "/" ? "full-nav" :"full-nav-another-route" } letter-primary`}>
-       
+      <div style={{ backgroundColor: primaryColor }} className={`${location.pathname === "/" ? "full-nav" : "full-nav-another-route"} letter-primary`}>
+
         <div className='nav-content mx-3'>
           <div className='d-none d-md-block text-white pointer' onClick={() => homeBtnClick()}>
             <img src={LogoImg} alt='logo' width={80} height={40} />
@@ -191,12 +193,12 @@ function Index() {
               {searchVal.length > 2 && <div className='search-dropdown'>
                 {categoryList.map((item) => {
                   return (
-                    <div onClick={()=> categorySearchValClick(item)} className='drop-suggestion'>{item.name} <small className='text-gray'>Category</small></div>
+                    <div onClick={() => categorySearchValClick(item)} className='drop-suggestion'>{item.name} <small className='text-gray'>Category</small></div>
                   )
                 })}
                 {productList.map((item) => {
                   return (
-                    <div onClick={()=> productDataClick(item)} className='drop-suggestion'>{item.product_name} </div>
+                    <div onClick={() => productDataClick(item)} className='drop-suggestion'>{item.product_name} </div>
                   )
                 })}
                 {categoryList.length === 0 && productList.length === 0 ? <div className='no-data-found'>No Products Match </div> : null}
@@ -215,14 +217,27 @@ function Index() {
               </div>
             </div>
             <div className='text-white'>
+
               <IconButton onClick={() => cartProducts.length > 0 ? addToCardBtnClick() : null}>
                 <Badge badgeContent={cartProducts.length} color="error">
                   <ShoppingCartOutlinedIcon className='text-white' sx={{ fontSize: 25 }} />
                 </Badge>
               </IconButton>
+
               {!token ? <Button onClick={() => signInBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Login</Button> :
 
-                <Button onClick={() => signOutBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Logout</Button>}
+              <>
+              
+                <IconButton>
+                  <ShoppingBagIcon className='text-white' />
+                </IconButton>
+                <IconButton onClick={() => signOutBtnClick()}>
+                  <LogoutOutlinedIcon className='text-white' />
+                </IconButton>
+                </>
+                // <Button onClick={() => signOutBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Logout</Button>
+
+              }
             </div>
           </div>
 

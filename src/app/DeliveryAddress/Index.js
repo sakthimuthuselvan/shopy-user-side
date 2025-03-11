@@ -501,13 +501,13 @@ function Index() {
     axiosApiCallFun(method, url, data, "verifyPaymentReq");
   }
   return (
-    <div style={{ backgroundColor: lightPrimary }} className='vh-100'>
+    <div style={{ backgroundColor: lightPrimary }} className={showNext ? 'vh-100': "" }>
       <Loader open={showLoader} />
       <div className='row mx-1 flex-column-reverse'>
         {
-        // showNext === false ?
-        //   inputDetailsBuild()
-        //   :
+        showNext === false ?
+          inputDetailsBuild()
+          :
           paymentMethodHtmlBuild()
         }
 
