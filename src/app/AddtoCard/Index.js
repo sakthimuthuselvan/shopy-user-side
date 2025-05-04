@@ -124,7 +124,6 @@ const dispatch = useDispatch()
   }
 
   const addMoreBtnClick = (item) => {
-    console.log("addMoreBtnClick ", item);
     const overall = cartProducts.map((data) => {
       if (data._id === item._id) {
         return { ...data, "quantity": data.quantity + 1 }
@@ -134,8 +133,6 @@ const dispatch = useDispatch()
     })
     setCardProducts(overall)
     dispatch(updatedCartProducts(overall))
-    console.log("overall ", overall);
-
   }
 
   const dropBtnClick = (item) => {
@@ -151,7 +148,7 @@ const dispatch = useDispatch()
       dispatch(updatedCartProducts(overall))
 
     } else {
-      console.log("remove api call");
+      
     }
 
   }

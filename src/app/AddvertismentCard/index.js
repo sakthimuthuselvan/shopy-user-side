@@ -19,7 +19,6 @@ const navigate = useNavigate()
 
 
   const adCardClickFun=(data)=>{
-console.log("data ",data);
 if(data.navigate_category){
   navigate(`categoty/${data.navigate_category}`)
 
