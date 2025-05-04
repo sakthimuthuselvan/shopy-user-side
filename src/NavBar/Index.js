@@ -231,9 +231,9 @@ function Index() {
                 <IconButton>
                   <ShoppingBagIcon className='text-white' />
                 </IconButton>
-                <IconButton onClick={() => signOutBtnClick()}>
+                {location.pathname === "/" && <IconButton onClick={() => signOutBtnClick()}>
                   <LogoutOutlinedIcon className='text-white' />
-                </IconButton>
+                </IconButton>}
                 </>
                 // <Button onClick={() => signOutBtnClick()} className='ms-3 text-white border-white fw-bold' size='small' variant='outlined'>Logout</Button>
 
