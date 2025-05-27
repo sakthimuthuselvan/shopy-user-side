@@ -162,20 +162,6 @@ function OverView() {
           <FooterCom />
         </Suspense>
       </div>
-
-      {/* <div className=' px-3 mt-3'>
-        <Typography variant='h6' className='fw-bold pt-3 pb-2'>Trending Cloths</Typography>
-
-        <div>
-          <Suspense fallback={<h1> </h1>}><ProductListCom productLists={productLists} /></Suspense>
-        </div>
-      </div> */}
-
-
-      {/* <GoogleMap /> */}
-
-      {/* <SignIn /> */}
-
     </div>
   )
 }

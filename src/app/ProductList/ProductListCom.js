@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import Product from "../Product/Product";
 import "./productlist.scss";
 import NoRecordsFound from "../../Utilities/NoRecordsFound";
+import { Skeleton } from "@mui/material";
 
-const Index = ({ productLists }) => {
+const Index = ({ loader, productLists }) => {
   const [state, setState] = useState({
     productList: [],
     skeletonArr: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
   });
-
+  const { skeletonArr } = state;
   useEffect(() => {
     setState((state) => ({
       ...state,
@@ -70,21 +71,34 @@ const Index = ({ productLists }) => {
           })}
 
         </div>
-      ) : (
-        <div className="row">
+      ) : loader ? <div className="row">
+        {skeletonArr.map((item) => {
+          return (
+            <div className=" p-2 card col-lg-2 col-md-2 col-sm-6 col-6">
+              <Skeleton
+                variant="rounded"
+                // className="m"
+                width={"100%"}
+                height={120}
+              />
+                 <Skeleton
+                variant="rounded"
+                className="mt-2"
+                width={"80%"}
+                height={20}
+              />
+              <Skeleton
+                variant="rounded"
+                className="mt-2"
+                width={"30%"}
+                height={10}
+              />
+            </div>
+          );
+        })}
+      </div> : (
+        <div>
           <NoRecordsFound message="Sorry, No Proucts found" />
-          {/* {skeletonArr.map((item) => {
-            return (
-              <div className="card col-lg-2 col-md-2 col-sm-6 col-6">
-                <Skeleton
-                  variant="rounded"
-                  className="mt-3"
-                  width={"100%"}
-                  height={150}
-                />
-              </div>
-            );
-          })} */}
         </div>
       )}
     </>

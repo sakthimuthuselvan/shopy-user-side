@@ -1,18 +1,13 @@
-import React, { Suspense, useEffect, useState } from 'react'
-import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
-import { encrypt } from '../../Utilities/Util';
+import React, { Suspense, useState } from 'react'
 import { Skeleton } from '@mui/material';
-import pructsImg from "./imag.png"
 import "./wishlist.scss"
 import { useSelector } from 'react-redux';
 
 const ProductListCom = React.lazy(() => import("../ProductList/ProductListCom"))
 const Index = () => {
-  const base_url = process.env.REACT_APP_BASE_URL;
   const globalState = useSelector(state => state)
-  const [skeletonShow, setskeletonShow] = useState()
   const [skeletonArr] = useState([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},])
-  const [overallList, setOverallList] = useState(globalState.addWhishList)
+  const [overallList] = useState(globalState.addWhishList)
 
   return (
     <div className='wishlist-style vh-100 light-green'>
