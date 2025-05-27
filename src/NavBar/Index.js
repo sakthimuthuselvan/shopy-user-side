@@ -78,7 +78,9 @@ function Index() {
 
   const addToCardBtnClick = () => {
     const token = !!localStorage.getItem("_Auth")
-    if (token) {
+    const user_data = localStorage.getItem("_Uset")
+
+    if (token && user_data) {
       navigate("/add/to/card")
       setSearchVal("")
     } else {
@@ -131,7 +133,6 @@ function Index() {
   }
 
   const searchResFun = (response) => {
-    console.log("response ", response);
     const { categories, products } = response;
     setCategoryList(categories)
     setProductList(products)
@@ -163,10 +164,11 @@ function Index() {
     setSearchVal("")
 
   }
+
+  const bagBtnClickFun=()=>{
+    navigate("previous/orders")
+  }
   const token = !!localStorage.getItem("_Auth")
-  console.log("location.pathname ", location.pathname);
-
-
   return (// render()
     <div className={location.pathname === "/" ? 'nav' : "nav-another-route"}>
       <div style={{ backgroundColor: primaryColor }} className={`${location.pathname === "/" ? "full-nav" : "full-nav-another-route"} letter-primary`}>
@@ -228,7 +230,7 @@ function Index() {
 
               <>
               
-                <IconButton>
+                <IconButton onClick={()=> bagBtnClickFun()}>
                   <ShoppingBagIcon className='text-white' />
                 </IconButton>
                 {location.pathname === "/" && <IconButton onClick={() => signOutBtnClick()}>

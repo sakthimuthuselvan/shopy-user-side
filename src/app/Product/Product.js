@@ -1,40 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import product1 from "../../Asset/product/product1.png"
 import { Button, Typography } from '@mui/material'
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useNavigate } from 'react-router-dom';
-import proImg from "./imag.png"
-import { useTheme } from '@emotion/react';
 import { addToCart, removeFromCart } from '../../Redux/Features/CartSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Product = (props) => {
   const dispatch = useDispatch();
-  const cartProducts = useSelector(state => state.cart.cartProducts)
-  console.log("productData ",cartProducts);
-  
-  const theme = useTheme();  // Access the current theme
-  const primaryColor = theme.palette.primary.main;
-  const { setStateAgainFun, productDetail } = props;
-  const base_url = process.env.REACT_APP_BASE_URL;
-  
+  const cartProducts = useSelector(state => state.cart.cartProducts)  
+  const {  productDetail } = props;  
   const currency = localStorage.getItem("CURRENCY")
+  const navigate = useNavigate()
 
   const [state, setState] = useState({
     productDetails: [],
     overallProducts: []
   })
-
-
-  const navigate = useNavigate()
-  const { productDetails,  overallProducts } = state;
+  const { productDetails } = state;
   useEffect(() => {
     setState((state) => ({
       ...state,
       productDetails: productDetail
     }))
-  }, [cartProducts])
+  }, [productDetail])
 
   const addBtnClick = (item) => {
     dispatch(addToCart(item))
@@ -42,16 +29,6 @@ const Product = (props) => {
 
   const cancelBtnClick = (item) => {
     dispatch(removeFromCart(item))
-  }
-
-  const whishListBtnClick = (item) => {
-    console.log("item _", item._id);
-    if (item.is_whishList === 1) {
-
-    } else {
-   
-
-    }
   }
 
   const productDetailBtnClick = (product) => {
@@ -66,8 +43,6 @@ const Product = (props) => {
   }
 
   const isCart = cartProducts.some((each)=> each._id === productDetail._id)
-
-  console.log("isCartisCart ", isCart);
   return ( // render()
     <div className={productDetails.total_quantity !== 0 ? "pointer" : 'overall-out-off-stock'} >
       <div className='img-card p-0 pt-2'>
@@ -75,9 +50,6 @@ const Product = (props) => {
           <div onClick={() => productDetailBtnClick(productDetails)} className='p-3 pt-1 h-25'>
             <img src={productDetails.cover_image} alt='product' className='w-100' />
           </div>
-
-
-
 
           <div style={{ height: 150 }}>
             <div className='overall-few-stocks-label'>
@@ -88,7 +60,7 @@ const Product = (props) => {
             <div className='p-3 pt-1'>
               <div className='d-flex justify-content-between'>
                 <Typography className='mb-0 fw-bold fs-12'>{productDetails.product_name}</Typography>
-                <div onClick={() => whishListBtnClick(productDetails)}>{productDetails.is_whishList === 1 ? <FavoriteIcon className='text-danger' /> : <FavoriteBorderIcon />}</div>
+                {/* <div onClick={() => whishListBtnClick(productDetails)}>{productDetails.is_whishList === 1 ? <FavoriteIcon className='text-danger' /> : <FavoriteBorderIcon />}</div> */}
               </div>
               <div className='my-0 mt-0 d-flex'>
                 <p className='m-0'>{productDetails.messure ? productDetails.messure : null}</p>

@@ -1,14 +1,11 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField, Typography, useTheme, } from '@mui/material';
 import HttpRequest from "../Utilities/ApiCall/HttpRequest";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import "./signup.css"
-import WindowWidth from "../Utilities/index"
 import Loader from '../Utilities/Loader/Loader';
 import MySnackbar from '../AlertShow/Alert';
-import { encrypt } from '../Utilities/Util';
 
 function SignUp({goLogInFun}) {
     const theme = useTheme();  // Access the current theme
@@ -29,9 +26,8 @@ function SignUp({goLogInFun}) {
         snackType: "success",
         snackMessage: ""
     })
-    const navigate = useNavigate()
-    const { email, phone, password, showPassword, emailErr, passwordErr, errMsg, name, nameErr, phoneErr,showLoader,openSnackbar,snackType,snackMessage  } = state;
 
+    const { email, phone, password, showPassword, emailErr, passwordErr, errMsg, name, nameErr, phoneErr,showLoader,openSnackbar,snackType,snackMessage  } = state;
 
     const handleInputChange = (e, name, err) => {
         let value = ""
@@ -136,10 +132,6 @@ function SignUp({goLogInFun}) {
     const goLogIn = () => {
         goLogInFun()
     }
-
-    const size = WindowWidth()
-
-
     return (
             <div>
                  <Loader open={showLoader}/>
@@ -166,6 +158,7 @@ function SignUp({goLogInFun}) {
                                         <TextField
                                             id='phone'
                                             name='phone'
+                                            type='number'
                                             value={phone}
                                             label="Phone Number"
                                             variant="outlined"
@@ -177,6 +170,7 @@ function SignUp({goLogInFun}) {
                                         <TextField
                                             id='email'
                                             name='email'
+                                            type='email'
                                             value={email}
                                             label="Email"
                                             variant="outlined"

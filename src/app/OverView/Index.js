@@ -1,21 +1,18 @@
 import React, { Suspense, useEffect, useState } from 'react'
-import { encrypt } from '../../Utilities/Util';
 import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
 import { Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
 
 const MySnackbar = React.lazy(() => import("../../AlertShow/Alert"))
-const ProductListCom = React.lazy(() => import("../ProductList/ProductListCom"))
 const AddvertismentCards = React.lazy(() => import("../AddvertismentCard/index"))
 const SliderCom = React.lazy(() => import("../Slider/SliderCom"))
 const CategoryList = React.lazy(() => import("../Category/Index"))
 const MostBuyingCom = React.lazy(() => import("../MostBuying/MostBuying"))
-
 const FooterCom = React.lazy(() => import("../Footer/FooterCom"))
 
 function OverView() {
-    const theme = useTheme();  // Access the current theme
-    const secondaryColor = theme.palette.secondary.main;  // Get the secondaryColor color
+  const theme = useTheme();  // Access the current theme
+  const secondaryColor = theme.palette.secondary.main;  // Get the secondaryColor color
 
   const [state, setState] = useState({
     productLists: [],
@@ -94,7 +91,7 @@ function OverView() {
 
       setState((state) => ({
         ...state,
-        productLists:  datas,
+        productLists: datas,
         skeletonShow: false
       }))
     } catch (error) {
@@ -108,55 +105,44 @@ function OverView() {
 
   }
   const sliderListApiCall = async () => {
- 
     setState((state) => ({ ...state, skeletonShow: true }))
     const method = "GET";
     const url = "slider/get/slider/banner";
-    const data = {
-      // "email": "email"
-    }
-
+    const data = {}
     try {
       const response = await HttpRequest({ method, url, data });
       setState((state) => ({
         ...state,
         sliderOverall: response.response_data ? response.response_data : [],
-        // addvertismentData: addvertismentData,
-        // categoryList: categoryList,
         skeletonShow: false
       }))
     } catch (error) {
-
       setState((pre) => ({
         ...pre,
         openSnakbar: true,
         openSnakbarType: "error",
         openSnakbarMsg: error.response_message ? error.response_message : "Something went wrong"
-
       }))
-
     }
   }
 
-console.log("productLists ",productLists);
-
   return (
     <div>
-          {openSnakbar ?   <Suspense fallback={<h1> </h1>}>
-            <MySnackbar open={openSnakbar} type={openSnakbarType} variant={"filled"} message={openSnakbarMsg} duration={3000} handleClose={() => setState((pre) => ({ ...pre, openSnakbar: false }))} />
-            </Suspense> : null}
+      {openSnakbar ? <Suspense fallback={<h1> </h1>}>
+        <MySnackbar open={openSnakbar} type={openSnakbarType} variant={"filled"} message={openSnakbarMsg} duration={3000} handleClose={() => setState((pre) => ({ ...pre, openSnakbar: false }))} />
+      </Suspense> : null}
 
-            <Suspense fallback={<h1> </h1>}>
-            <SliderCom SliderData={sliderOverall} />
-            </Suspense>
+      <Suspense fallback={<h1> </h1>}>
+        <SliderCom SliderData={sliderOverall} />
+      </Suspense>
 
       <div className='px-3'>
         <div>
           <Suspense fallback={<h1> </h1>}>
-          <AddvertismentCards addvertismentData={addvertismentData} />
+            <AddvertismentCards addvertismentData={addvertismentData} />
           </Suspense>
           <Suspense fallback={<h1> </h1>}>
-          <CategoryList categoryList={categoryList} />
+            <CategoryList categoryList={categoryList} />
           </Suspense>
         </div>
       </div>
@@ -166,15 +152,15 @@ console.log("productLists ",productLists);
         <Typography variant='h6' className='fw-bold pt-3 pb-2'>Most Buying Products</Typography>
         <div>
           <Suspense fallback={<h1> </h1>}>
-          <MostBuyingCom productLists={productLists} />
+            <MostBuyingCom productLists={productLists} />
           </Suspense>
         </div>
       </div>
 
-      <div style={{backgroundColor: secondaryColor}} className='px-3'>
-<Suspense fallback={<h1> </h1>}>
-<FooterCom />
-</Suspense>
+      <div style={{ backgroundColor: secondaryColor }} className='px-3'>
+        <Suspense fallback={<h1> </h1>}>
+          <FooterCom />
+        </Suspense>
       </div>
 
       {/* <div className=' px-3 mt-3'>

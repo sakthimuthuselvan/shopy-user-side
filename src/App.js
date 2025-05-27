@@ -12,6 +12,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { lightenColor } from './Utilities/Util';
 import LogInCom from "../src/SignIn/SingIn"
+import ScrollToTop from './Utilities/ScrollToTop';
 
 function AppContent() {
   const currentRoute = useCurrentRoute();
@@ -91,11 +92,12 @@ const [openlogInDialog, setOpenlogInDialog]=useState(false)
 function App() {
   return (
     <BrowserRouter>
-     <NavBar />
-      <AppContent />
-
+      <ScrollToTop />  {/* This will listen to location changes */}
+      <NavBar />       {/* Your navigation bar */}
+      <AppContent />   {/* This contains your <Routes> */}
     </BrowserRouter>
   );
 }
+
 
 export default App;

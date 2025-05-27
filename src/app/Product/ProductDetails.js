@@ -2,25 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Slider from "react-slick";
 import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
-import { encrypt } from '../../Utilities/Util';
-import product1 from "../../Asset/product/product1.png"
 import { Button, Skeleton } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { useTheme } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../../Redux/Features/CartSlice';
 import DOMPurify from 'dompurify';
 
 const ProductDetails = () => {
-  const theme = useTheme();  // Access the current theme
-  const primaryColor = theme.palette.primary.main;
-   const cartProducts = useSelector(state => state.cart.cartProducts)
-   console.log("cartProducts ",cartProducts);
-   const currency = localStorage.getItem("CURRENCY")
-
+  const cartProducts = useSelector(state => state.cart.cartProducts)
+  const currency = localStorage.getItem("CURRENCY")
   const dispatch = useDispatch()
-
   const { id } = useParams(); // Accessing the dynamic parameter ":id"
 
   const [state, setState] = useState({
@@ -28,25 +18,13 @@ const ProductDetails = () => {
     skeletonShow: false,
     overallProducts: []
   })
-const { overallDetails } = state;
+  const { overallDetails } = state;
   useEffect(() => {
-    console.log("============= ",id);
-    
-   if(id){
-    productDetailsAPiCall(id)
-   }
-
+    if (id) {
+      productDetailsAPiCall(id)
+    }
   }, [id, cartProducts])
 
-  const initialFun=()=>{
-  //   const selectedProduct = overallProducts.find((item)=> item._id === id)
-  //   console.log("selectedProduct ",selectedProduct);
-  //   setState((state) => ({
-  //    ...state,
-  //    overallDetails: selectedProduct,
-  //    skeletonShow: false
-  //  }))
-  }
   const productDetailsAPiCall = async (id) => {
     setState((state) => ({ ...state, skeletonShow: true }))
     const method = "Post";
@@ -54,27 +32,8 @@ const { overallDetails } = state;
     const data = {
       "product_id": id
     }
-
     try {
       const response = await HttpRequest({ method, url, data });
-      console.log(response.response_data);
-      // const data = {
-      //   product_images: [product1, product1],
-      //   product_name: "Onion (Nattu vengayam)",
-      //   product_type: "vegitable",
-      //   messure: "kg",
-      //   size: 1,
-      //   price: 50,
-      //   is_whishList: 0,
-      //   about_product: "",
-      //   is_offer: 1,
-      //   old_price: 70,
-      //   offer_percentage: 40,
-      //   add_cart: 0,
-      //   currency: "₹",
-      //   suggestion_product: [],
-      //   total_quantity: 0,
-      // }
       setState((state) => ({
         ...state,
         overallDetails: response.response_data ? response.response_data : {},
@@ -82,30 +41,18 @@ const { overallDetails } = state;
       }))
     } catch (error) {
 
-      console.log(error);
-
     }
   }
 
   const cancelBtnClick = (item) => {
     // remove from the cart API call
-        dispatch(removeFromCart(item))
-    
+    dispatch(removeFromCart(item))
+
   }
 
   const addBtnClick = (item) => {
     //Add to cart API call
     dispatch(addToCart(item))
-  }
-
-  const whishListBtnClick = (item) => {
-    if (item.is_whishList === 1) {
-      // remove wish list Api call
-
-    } else {
-      // add whish list Apicall
-
-    }
   }
 
   const settings = {
@@ -115,9 +62,7 @@ const { overallDetails } = state;
     autoplay: false,
     focus: false,
   };
-  const isCheckCart = cartProducts.map((item)=> item._id).includes(id)
-  console.log("isCheckCart ",isCheckCart);
-  
+  const isCheckCart = cartProducts.map((item) => item._id).includes(id)
   return (
     <div className=''>
       {Object.keys(overallDetails).length > 0 ?
@@ -128,27 +73,27 @@ const { overallDetails } = state;
                 {overallDetails.product_images.map((item) => {
                   return (
                     <div className='d-flex justify-content-center'>
-                      <img src={item} className='' height={350}/>
+                      <img src={item} className='' alt='Redundant' height={350} />
                     </div>
                   )
                 })}
               </Slider>
-              : 
-              <div className='d-flex justify-content-center'>
-              <img src={overallDetails.product_images[0]} className='' height={350}/>
-            </div>}
+                :
+                <div className='d-flex justify-content-center'>
+                  <img src={overallDetails.product_images[0]} className='' alt='Redundant' height={350} />
+                </div>}
             </div>
           </div>
           <div className='col-lg-6 col-md-6 col-sm-12 col-12 mt-3 pl-2'>
             <div className='w-90 mx-auto'>
               <div className='d-flex justify-content-between'>
                 <h4 className='title mt-2'>{overallDetails.product_name}</h4>
-                <div className="mr-5 mt-2" onClick={() => whishListBtnClick(overallDetails)}>{overallDetails.is_whishList === 1 ? <FavoriteIcon className='text-danger' /> : <FavoriteBorderIcon />}</div>
+                {/* <div className="mr-5 mt-2" onClick={() => whishListBtnClick(overallDetails)}>{overallDetails.is_whishList === 1 ? <FavoriteIcon className='text-danger' /> : <FavoriteBorderIcon />}</div> */}
 
               </div>
               <h6 className='text-grey mt-0'>{overallDetails.messure}</h6>
               <div className='d-flex mt-3'>
-                <h4 className='title'>{currency+" " + overallDetails.price}</h4>
+                <h4 className='title'>{currency + " " + overallDetails.price}</h4>
 
                 {overallDetails.is_offer === 1 ?
 
@@ -165,13 +110,13 @@ const { overallDetails } = state;
               <div className='mt-4'>
                 {isCheckCart ?
                   <Button
-                  sx={{
-                    backgroundColor: 'secondary.main', // Use primary color for background
-                    color: 'white', // Text color (optional)
-                    '&:hover': {
-                      backgroundColor: 'secondary.dark', // Darker shade of primary color on hover
-                    },
-                  }}
+                    sx={{
+                      backgroundColor: 'secondary.main', // Use primary color for background
+                      color: 'white', // Text color (optional)
+                      '&:hover': {
+                        backgroundColor: 'secondary.dark', // Darker shade of primary color on hover
+                      },
+                    }}
                     variant='contained'
                     className='text-white bold'
                     size='small'
@@ -195,7 +140,7 @@ const { overallDetails } = state;
               </div>
             </div>
             <div className='border-top mt-4'>
-            <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(overallDetails.description) }} />
+              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(overallDetails.description) }} />
             </div>
           </div>
         </div> :

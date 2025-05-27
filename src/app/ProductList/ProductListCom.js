@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Product from "../Product/Product";
-import { Skeleton } from "@mui/material";
 import "./productlist.scss";
+import NoRecordsFound from "../../Utilities/NoRecordsFound";
 
 const Index = ({ productLists }) => {
   const [state, setState] = useState({
-    productList: productLists,
+    productList: [],
     skeletonArr: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
   });
 
@@ -15,7 +15,8 @@ const Index = ({ productLists }) => {
       productList: productLists,
     }));
   }, [productLists]);
-  const { productList, skeletonArr } = state;
+
+  const { productList } = state;
 
   const setStateAgainFun = useCallback(
     (check, clickedItem) => {
@@ -41,7 +42,7 @@ const Index = ({ productLists }) => {
         }));
       }
     },
-    [productList]
+    []
   );
 
   return (
@@ -68,45 +69,11 @@ const Index = ({ productLists }) => {
             );
           })}
 
-{productList.map((item) => {
-            return (
-              <div className=" col-lg-2 col-md-3 col-sm-6 col-6 mb-2 px-1">
-                <Product
-                  productDetail={item}
-                  product_name={item.product_name}
-                  is_whishList={item.is_whishList}
-                  product_img={item.cover_image}
-                  messure={item.messure}
-                  offer_percentage={item.offer_percentage}
-                  is_offer={item.is_offer}
-                  price={item.price}
-                  setStateAgainFun={setStateAgainFun}
-                />
-              </div>
-            );
-          })}
-
-{productList.map((item) => {
-            return (
-              <div className=" col-lg-2 col-md-3 col-sm-6 col-6 mb-2 px-1">
-                <Product
-                  productDetail={item}
-                  product_name={item.product_name}
-                  is_whishList={item.is_whishList}
-                  product_img={item.cover_image}
-                  messure={item.messure}
-                  offer_percentage={item.offer_percentage}
-                  is_offer={item.is_offer}
-                  price={item.price}
-                  setStateAgainFun={setStateAgainFun}
-                />
-              </div>
-            );
-          })}
         </div>
       ) : (
         <div className="row">
-          {skeletonArr.map((item) => {
+          <NoRecordsFound message="Sorry, No Proucts found" />
+          {/* {skeletonArr.map((item) => {
             return (
               <div className="card col-lg-2 col-md-2 col-sm-6 col-6">
                 <Skeleton
@@ -115,22 +82,9 @@ const Index = ({ productLists }) => {
                   width={"100%"}
                   height={150}
                 />
-                <Skeleton
-                  variant="rounded"
-                  className="mt-1"
-                  width={"100%"}
-                  height={20}
-                />
-
-                <Skeleton
-                  variant="rounded"
-                  className="mt-1"
-                  width={"70%"}
-                  height={15}
-                />
               </div>
             );
-          })}
+          })} */}
         </div>
       )}
     </>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import "./style.scss"
-import { Autocomplete, Button, FormControl, FormLabel, InputLabel, MenuItem, Radio, Select, TextField } from '@mui/material'
+import { Autocomplete, Button, FormControl, InputLabel, MenuItem, Radio, Select, TextField } from '@mui/material'
 import stateList from "../../JsonList/StateList/Index.json";
 import { useDispatch, useSelector } from 'react-redux';
 import { TbTruckDelivery } from 'react-icons/tb';
@@ -11,6 +11,8 @@ import Loader from "../../Utilities/Loader/Loader";
 import { getUserData, lightenColor } from '../../Utilities/Util';
 import { removeAllProducts } from '../../Redux/Features/CartSlice';
 import { useNavigate } from 'react-router-dom';
+import MySnackbar from '../../AlertShow/Alert';
+
 function Index() {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
@@ -20,24 +22,25 @@ function Index() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [overallList] = useState(cartProducts)
+
   const [formInputs, setFormInputs] = useState({
     firstName: "",
-    firstNameErr: false,
     address1: "",
-    address1Err: false,
     address2: "",
-    address2Err: false,
-    country: "india",
-    countryErr: false,
-    state: { code: "", name: "" },
-    stateErr: false,
-    district: "",
-    districtErr: false,
-    phoneNumber: "",
-    phoneNumberErr: false,
-    pincode: "",
-    pincodeErr: false,
     landMark: "",
+    phoneNumber: "",
+    district: "",
+    state: { code: "", name: "" },
+    country: "india",
+    pincode: "",
+    address1Err: false,
+    firstNameErr: false,
+    address2Err: false,
+    countryErr: false,
+    stateErr: false,
+    districtErr: false,
+    phoneNumberErr: false,
+    pincodeErr: false,
     landMarkErr: false,
   })
   const [showLoader, setShowLoader] = useState(false);
@@ -119,6 +122,7 @@ function Index() {
       document.getElementById("district").focus()
     } else {
       setShowNext(true)
+          window.scrollTo(0, 0);
     }
 
   }
@@ -226,7 +230,19 @@ function Index() {
       "razorpay_order_id": response.razorpay_order_id,
       "razorpay_signature": response.razorpay_signature,
       "currency": dataPre.currency,
-      "amount": (dataPre.amount / 100)
+      "amount": (dataPre.amount / 100),
+      "products": overallList,
+      "shippingAddress": {
+        "firstName": formInputs.firstName ?? "",
+        "address1": formInputs.address1 ?? "",
+        "address2": formInputs.address2 ?? "",
+        "landMark": formInputs.landMark ?? "",
+        "phoneNumber": formInputs.phoneNumber ?? "",
+        "district": formInputs.district ?? "",
+        "state": formInputs.state ?? "",
+        "country": formInputs.country ?? "",
+        "pincode": formInputs.pincode ?? ""
+      }
     }
     axiosApiCallFun(method, url, data, "verifyPaymentReq");
   }
@@ -362,8 +378,8 @@ function Index() {
                   id='state'
                   options={stateList}
                   getOptionLabel={(option) => option.name}
-                  value={state}
-                  onChange={(e, val) => handleChange("state", "stateErr", val)}
+                  value={stateList.find((item) => item.name === state) || null}
+                  onChange={(e, val) => handleChange("state", "stateErr", val.name)}
                   renderInput={(params) => <TextField
                     {...params}
                     label="State"
@@ -389,12 +405,8 @@ function Index() {
               <div className='col-lg-6 col-md-12 col-sm-12 mt-3'>
                 <TextField
                   id="phoneNumber"
-                  type="text" // Change to text to respect maxLength
-                  onChange={(e) => {
-                    if (/^\d{0,10}$/.test(e.target.value)) {
-                      handleChange("phoneNumber", "phoneNumberErr", e.target.value);
-                    }
-                  }}
+                  type='number'
+                  onChange={(e) => handleChange("phoneNumber", "phoneNumberErr", e.target.value)}
                   variant="outlined"
                   label="Phone Number"
                   value={phoneNumber}
@@ -444,6 +456,7 @@ function Index() {
               value="a"
               name="radio-buttons"
               inputProps={{ "aria-label": "A" }}
+              disabled
             />
             Cash On Delivery
           </span>
@@ -463,7 +476,7 @@ function Index() {
         </div>
 
         <div className='d-flex justify-content-end'>
-          <Button onClick={()=> backBtnClick()} variant='contained' size='samll' color='secondary' className='me-2'>Back</Button>
+          <Button onClick={() => backBtnClick()} variant='contained' size='samll' color='secondary' className='me-2'>Back</Button>
 
           <Button onClick={() => proceedToPayCall()} variant='contained' size='samll' color='primary'>Proceed Pay</Button>
 
@@ -473,20 +486,19 @@ function Index() {
     )
   }
 
-  const backBtnClick=()=>{
+  const backBtnClick = () => {
     setShowNext(false)
   }
   const proceedToPayCall = () => {
     if (selectedValue === 1) {
       submitApiCallFun()
-    }else{
-    cashOnDeliveryApiCall()
+    } else {
+      cashOnDeliveryApiCall()
     }
   }
 
-  const cashOnDeliveryApiCall=()=>{
-    
-     const method = "POST";
+  const cashOnDeliveryApiCall = () => {
+    const method = "POST";
     const url = "verify-payment";
     let totalAmt = 0;
     overallList.forEach((item) => {
@@ -496,19 +508,42 @@ function Index() {
       "user_id": getUserData() && getUserData().user_id ? getUserData().user_id : "",
       "payment_type": 2,
       "currency": currency,
-      "amount": totalAmt
+      "amount": totalAmt,
+      "products": overallList,
+      "shippingAddress": {
+        "firstName": formInputs.firstName ?? "",
+        "address1": formInputs.address1 ?? "",
+        "address2": formInputs.address2 ?? "",
+        "landMark": formInputs.landMark ?? "",
+        "phoneNumber": formInputs.phoneNumber ?? "",
+        "district": formInputs.district ?? "",
+        "state": formInputs.state ?? "",
+        "country": formInputs.country ?? "",
+        "pincode": formInputs.pincode ?? ""
+      }
     }
     axiosApiCallFun(method, url, data, "verifyPaymentReq");
   }
   return (
-    <div style={{ backgroundColor: lightPrimary }} className={showNext ? 'vh-100': "" }>
+    <div style={{ backgroundColor: lightPrimary }} className={showNext ? 'vh-100' : ""}>
       <Loader open={showLoader} />
+         <MySnackbar
+              open={alertData.openSnakbar}
+              type={alertData.openSnakbarType}
+              variant="filled"
+              message={alertData.openSnakbarMsg}
+              duration={3000}
+              handleClose={() =>
+                setAlertData((prev) => ({ ...prev, openSnakbar: false }))
+              }
+            />
+
       <div className='row mx-1 flex-column-reverse'>
         {
-        showNext === false ?
-          inputDetailsBuild()
-          :
-          paymentMethodHtmlBuild()
+          showNext === false ?
+            inputDetailsBuild()
+            :
+            paymentMethodHtmlBuild()
         }
 
         <div className=' col-lg-4 mt-2 col-md-12 col-sm-12'>

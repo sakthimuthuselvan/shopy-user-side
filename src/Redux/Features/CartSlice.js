@@ -27,15 +27,11 @@ const cartSlice = createSlice({
       );
     },
     updatedCartProducts: (state, action) => {
-      const product = action.payload;
-
       // Filter out the product with the given ID from the cart
       state.cartProducts = action.payload
     },
 
     removeAllProducts: (state, action) => {
-      const product = action.payload;
-
       // Filter out the product with the given ID from the cart
       state.cartProducts = []
     },

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import WindowWidth from '../Utilities'
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
@@ -8,32 +7,31 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { Button, IconButton, InputLabel } from '@mui/material';
 import HttpRequest from '../Utilities/ApiCall/HttpRequest';
 import MySnackbar from '../AlertShow/Alert';
-import {useSelector } from 'react-redux';
-import { encrypt } from '../Utilities/Util';
+import { useSelector } from 'react-redux';
 
-const ResetPassword = ({goLogInFun}) => {
-const [state,setState] = useState({
-    email:"",
-    showPassword1 : false,
-    showPassword2: false,
-    password:"",
-    passwordErr: false,
-    confirmPassword:"",
-    confirmPasswordErr: false,
-    errMsg: "",
-    alertType:"",
-    alertMessage:""
-})
+const ResetPassword = ({ goLogInFun }) => {
+    const [state, setState] = useState({
+        email: "",
+        showPassword1: false,
+        showPassword2: false,
+        password: "",
+        passwordErr: false,
+        confirmPassword: "",
+        confirmPasswordErr: false,
+        errMsg: "",
+        alertType: "",
+        alertMessage: ""
+    })
 
-    const globalState = useSelector((state)=>state)
-    const {showPassword1,showPassword2,password,passwordErr,confirmPassword,confirmPasswordErr,errMsg,email} = state;
+    const globalState = useSelector((state) => state)
+    const { showPassword1, showPassword2, password, passwordErr, confirmPassword, confirmPasswordErr, errMsg } = state;
 
-    useEffect(()=>{
-setState((pre)=>({
-    ...pre,
-    email:globalState.email
-}))
-    },[globalState.email])
+    useEffect(() => {
+        setState((pre) => ({
+            ...pre,
+            email: globalState.email
+        }))
+    }, [globalState.email])
 
     const handleClickShowPassword1 = () => {
         setState((pre) => {
@@ -44,7 +42,7 @@ setState((pre)=>({
         })
     }
 
-    const handleClickShowPassword2=()=>{
+    const handleClickShowPassword2 = () => {
         setState((pre) => {
             return {
                 ...pre,
@@ -61,78 +59,76 @@ setState((pre)=>({
         })
     }
 
-    const resetSubmitFun=()=>{
-        if(!password){
-            setState((pre)=>({
+    const resetSubmitFun = () => {
+        if (!password) {
+            setState((pre) => ({
                 ...pre,
-                passwordErr:true,
-                errMsg:"This field is required"
+                passwordErr: true,
+                errMsg: "This field is required"
             }))
             document.getElementById("password").focus()
-        }else if(!confirmPassword){
-            setState((pre)=>({
+        } else if (!confirmPassword) {
+            setState((pre) => ({
                 ...pre,
-                confirmPasswordErr:true,
-                errMsg:"This field is required"
+                confirmPasswordErr: true,
+                errMsg: "This field is required"
             }))
             document.getElementById("confirmPassword").focus()
-        }else if(password !== confirmPassword){
-            setState((pre)=>({
+        } else if (password !== confirmPassword) {
+            setState((pre) => ({
                 ...pre,
-                confirmPasswordErr:true,
-                errMsg:"Confirm password is not match to password"
+                confirmPasswordErr: true,
+                errMsg: "Confirm password is not match to password"
             }))
             document.getElementById("confirmPassword").focus()
-        }else{
+        } else {
             resetApiCallFun()
         }
     }
 
     const resetApiCallFun = async () => {
-      
+
         const method = "POST";
         const url = "shopy/reset/password";
         const data = {
-          email: globalState.email,
-          password: confirmPassword, // Provide a valid password here
+            email: globalState.email,
+            password: confirmPassword, // Provide a valid password here
         };
         try {
-          const response = await HttpRequest({ method, url, data });
-          console.log(response);
-          setState((pre)=>({
-            ...pre,
-            confirmPasswordErr: false,
-            passwordErr: false,
-            showLoader: false,
-            openSnackbar: true,
-            snackType: "success",
-            snackMessage: response.message
-          }))
-          goLogInFun()
+            const response = await HttpRequest({ method, url, data });
+            setState((pre) => ({
+                ...pre,
+                confirmPasswordErr: false,
+                passwordErr: false,
+                showLoader: false,
+                openSnackbar: true,
+                snackType: "success",
+                snackMessage: response.message
+            }))
+            goLogInFun()
         } catch (error) {
-          console.log(error);
-          setState((pre)=>({
-            ...pre,
-            confirmPasswordErr: false,
-            passwordErr: false,
-            showLoader: false,
-            openSnackbar: true,
-            snackType: "error",
-            snackMessage: error.message
-          }))
+            setState((pre) => ({
+                ...pre,
+                confirmPasswordErr: false,
+                passwordErr: false,
+                showLoader: false,
+                openSnackbar: true,
+                snackType: "error",
+                snackMessage: error.message
+            }))
         }
-      };
-        
+    };
 
-  return (
-    <div>
-        <MySnackbar open={false} type={"success"} variant={"filled"} message={"OTP sent successfully"} duration={3000}/>
-     
-      <div>
-               
+
+    return (
+        <div>
+            <MySnackbar open={false} type={"success"} variant={"filled"} message={"OTP sent successfully"} duration={3000} />
+
+            <div>
+
                 <div className={`p-0 w-100 d-flex`}>
 
-                
+
                     <div className={"w-100"}>
                         <div className='d-flex justify-content-center mx-3 ml-4'>
                             <div className='text-center mt-4 mx-3'>
@@ -142,7 +138,7 @@ setState((pre)=>({
 
                                 <div className=''>
 
-                                <FormControl className='my-2 w-100' variant="outlined" error={passwordErr}>
+                                    <FormControl className='my-2 w-100' variant="outlined" error={passwordErr}>
                                         <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                                         <OutlinedInput
                                             id="password"
@@ -174,7 +170,7 @@ setState((pre)=>({
                                                 <InputAdornment position="end">
                                                     <IconButton
                                                         aria-label="toggle password visibility"
-                                                        onClick={()=> handleClickShowPassword2()}
+                                                        onClick={() => handleClickShowPassword2()}
                                                         edge="end"
                                                     >
                                                         {showPassword2 ? <VisibilityOff /> : <Visibility />}
@@ -202,8 +198,8 @@ setState((pre)=>({
                     </div>
                 </div>
             </div>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default ResetPassword

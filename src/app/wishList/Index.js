@@ -10,7 +10,6 @@ const ProductListCom = React.lazy(() => import("../ProductList/ProductListCom"))
 const Index = () => {
   const base_url = process.env.REACT_APP_BASE_URL;
   const globalState = useSelector(state => state)
-  console.log("globalState ====== ",globalState.addWhishList);
   const [skeletonShow, setskeletonShow] = useState()
   const [skeletonArr] = useState([{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},])
   const [overallList, setOverallList] = useState(globalState.addWhishList)

@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
-import { encrypt, lightenColor } from '../../Utilities/Util';
-import { Button, ButtonGroup, Skeleton, Typography } from '@mui/material';
+import React, { useState } from 'react'
+import { lightenColor } from '../../Utilities/Util';
+import { Button, ButtonGroup, Skeleton } from '@mui/material';
 import "./style.scss"
 import WindowWidth from '../../Utilities';
 import { CgNotes } from "react-icons/cg";
@@ -14,15 +13,14 @@ import { updatedCartProducts } from '../../Redux/Features/CartSlice';
 const Index = () => {
   const theme = useTheme();  // Access the current theme
   const primaryColor = theme.palette.primary.main;  // Get the primary color
-    const lightPrimary = lightenColor(primaryColor)
-  
-const productList = useSelector(state => state.cart.cartProducts).map((item)=>({...item,"quantity":1}))
+  const lightPrimary = lightenColor(primaryColor)
+
+  const productList = useSelector(state => state.cart.cartProducts).map((item) => ({ ...item, "quantity": 1 }))
 
   const navigate = useNavigate()
- const currency = localStorage.getItem("CURRENCY")
-const dispatch = useDispatch()
-  const [skeletonShow, setskeletonShow] = useState()
-  const [cartProducts,setCardProducts] = useState(productList)
+  const currency = localStorage.getItem("CURRENCY")
+  const dispatch = useDispatch()
+  const [cartProducts, setCardProducts] = useState(productList)
 
 
   const skeletonBuild = () => {
@@ -83,14 +81,14 @@ const dispatch = useDispatch()
                   {size !== "lg" ?
                     <div className='mb-4'>
                       <ButtonGroup
-                       sx={{
-                        backgroundColor: 'primary.main', // Use primary color for background
-                        color: 'white', // Text color (optional)
-                        '&:hover': {
-                          backgroundColor: 'primary.dark', // Darker shade of primary color on hover
-                        },
-                      }}
-                      variant="outlined" size='small'  aria-label="Basic button group">
+                        sx={{
+                          backgroundColor: 'primary.main', // Use primary color for background
+                          color: 'white', // Text color (optional)
+                          '&:hover': {
+                            backgroundColor: 'primary.dark', // Darker shade of primary color on hover
+                          },
+                        }}
+                        variant="outlined" size='small' aria-label="Basic button group">
                         <Button color='primary' className=' fw-bold text-white border border-right border-white' onClick={() => dropBtnClick(item)}>-</Button>
                         <Button className=' fw-bold text-white  border border-right border-white'>{item.quantity}</Button>
                         <Button className=' fw-bold text-white  border border-right border-white' onClick={() => addMoreBtnClick(item)}>+</Button>
@@ -148,9 +146,8 @@ const dispatch = useDispatch()
       dispatch(updatedCartProducts(overall))
 
     } else {
-      
-    }
 
+    }
   }
 
   const totalBuild = () => {
@@ -169,7 +166,7 @@ const dispatch = useDispatch()
           </div>
           <div className='d-flex justify-content-between mt-2'>
             <p className='m-0'><TbTruckDelivery className='me-2' />Delivery Charge </p>
-            <p style={{color: primaryColor}} className='fw-bold'>Free</p>
+            <p style={{ color: primaryColor }} className='fw-bold'>Free</p>
           </div>
 
 
@@ -180,7 +177,7 @@ const dispatch = useDispatch()
 
           <div className='d-flex justify-content-center mt-5'>
             <button
-            style={{backgroundColor: primaryColor}}
+              style={{ backgroundColor: primaryColor }}
               className='submit-btn'
               onClick={() => payBtnClick()}
             >Proceed To Pay {currency ? currency : null} {getTotalAmt() ? getTotalAmt() : null} </button>
@@ -193,12 +190,11 @@ const dispatch = useDispatch()
 
   const phoneBillDetails = () => {
     let totalAmt = 0;
-    let shipping = 0
     cartProducts.forEach((item) => {
       totalAmt += item.price * item.quantity
     })
     return (
-      <div  className='jr-card mx-4'>
+      <div className='jr-card mx-4'>
         <h5 className='fw-bold'>Bill Details</h5>
         <div className='d-flex justify-content-between'>
           <p className='m-0'><CgNotes className='me-2' />Total </p>
@@ -206,7 +202,7 @@ const dispatch = useDispatch()
         </div>
         <div className='d-flex justify-content-between'>
           <p className='m-0'><TbTruckDelivery className='me-2' />Delivery Charge </p>
-          <p style={{color: primaryColor}} className='fw-bold'>Free</p>
+          <p style={{ color: primaryColor }} className='fw-bold'>Free</p>
         </div>
         <div className='d-flex justify-content-between'>
           <p className='m-0 fw-bold'>Grant Total </p>
@@ -232,9 +228,9 @@ const dispatch = useDispatch()
 
   const size = WindowWidth()
   return (
-    <div style={{backgroundColor: lightPrimary }} className='cart-style h-100'>
-      <div style={{paddingBottom:"130px"}} className='position-relative px-lg-3 '>
-        <div  className='overall'>
+    <div style={{ backgroundColor: lightPrimary }} className='cart-style h-100'>
+      <div style={{ paddingBottom: "130px" }} className='position-relative px-lg-3 '>
+        <div className='overall'>
           <div className='box1 px-lg-4'>
             {cartProducts.length > 0 ?
               produdutBuild()
@@ -258,7 +254,7 @@ const dispatch = useDispatch()
             <div className='jr-card m-0'>
               <div className='d-flex justify-content-center '>
                 <button
-                  style={{backgroundColor: primaryColor}}
+                  style={{ backgroundColor: primaryColor }}
                   onClick={() => payBtnClick()}
                   className='submit-btn rounded px-5 py-2'
                 >Proceed To Pay {currency ? currency : null} {getTotalAmt() ? getTotalAmt() : null}</button>
