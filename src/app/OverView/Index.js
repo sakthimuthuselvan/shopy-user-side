@@ -148,8 +148,7 @@ function OverView() {
       </div>
 
       <div className='bg-grey px-3 py-2 mt-3'>
-        {/* <h3 className='title pt-3 pb-2'>Most Buying Products</h3> */}
-        <Typography variant='h6' className='fw-bold pt-3 pb-2'>Most Buying Products</Typography>
+        <Typography variant='subtitle1' className='fw-bold pt-3 pb-2'>Most Buying Products</Typography>
         <div>
           <Suspense fallback={<h1> </h1>}>
             <MostBuyingCom productLists={productLists} />

@@ -89,11 +89,11 @@ const [openlogInDialog, setOpenlogInDialog]=useState(false)
 
 
 
-function App() {
+function App({navImg}) {
   return (
     <BrowserRouter>
       <ScrollToTop />  {/* This will listen to location changes */}
-      <NavBar />       {/* Your navigation bar */}
+      <NavBar navImg={navImg}/>       {/* Your navigation bar */}
       <AppContent />   {/* This contains your <Routes> */}
     </BrowserRouter>
   );

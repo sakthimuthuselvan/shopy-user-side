@@ -16,7 +16,7 @@ import { removeUserData } from '../Utilities/Util';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBagOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
-function Index() {
+function Index({navImg}) {
   const navigate = useNavigate()
   const location = useLocation()
   const theme = useTheme();  // Access the current theme
@@ -175,7 +175,7 @@ function Index() {
 
         <div className='nav-content mx-3'>
           <div className='d-none d-md-block text-white pointer' onClick={() => homeBtnClick()}>
-            <img src={LogoImg} alt='logo' width={80} height={40} />
+            <img src={navImg} alt='logo' width={80} height={40} />
           </div>
 
           {location.pathname === "/" &&
@@ -213,7 +213,7 @@ function Index() {
             <div className='d-md-none'>
               <div className='d-flex align-items-center'>
                 <h3 className='text-white pl-4 pt-2 ml-3' onClick={() => homeBtnClick()}>
-                  <img src={LogoImg} alt='THE NATIVE ORGANIC' width={80} height={40} />
+                  <img src={navImg} alt='THE NATIVE ORGANIC' width={80} height={40} />
 
                 </h3>
               </div>

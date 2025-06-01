@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import Slider from "react-slick";
 import HttpRequest from '../../Utilities/ApiCall/HttpRequest';
-import { Button, Skeleton } from '@mui/material';
+import { Button, Skeleton, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, removeFromCart } from '../../Redux/Features/CartSlice';
 import DOMPurify from 'dompurify';
@@ -87,7 +87,7 @@ const ProductDetails = () => {
           <div className='col-lg-6 col-md-6 col-sm-12 col-12 mt-3 pl-2'>
             <div className='w-90 mx-auto'>
               <div className='d-flex justify-content-between'>
-                <h4 className='title mt-2'>{overallDetails.product_name}</h4>
+                <Typography variant='subtitle1' className='fw-bold mt-2'>{overallDetails.product_name}</Typography>
                 {/* <div className="mr-5 mt-2" onClick={() => whishListBtnClick(overallDetails)}>{overallDetails.is_whishList === 1 ? <FavoriteIcon className='text-danger' /> : <FavoriteBorderIcon />}</div> */}
 
               </div>

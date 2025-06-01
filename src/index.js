@@ -55,6 +55,8 @@ const Root = () => {
   const getSiteSettingDatasRes = (response) => {
     const data = response.response_data ? response.response_data : {};
     // Handle the response here
+    console.log("data ",data);
+    
     setSiteData(data);
     localStorage.setItem("CURRENCY", "₹")
 
@@ -77,7 +79,7 @@ const Root = () => {
       },
     },
     typography: {
-      fontFamily: "Roboto, Arial, sans-serif", // Customize your font family
+      fontFamily: siteData.font_family ?? "Roboto, Arial, sans-serif", // Customize your font family
     },
   });
 
@@ -112,7 +114,7 @@ const Root = () => {
 
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <App />
+          <App navImg={siteData.fav_icon} />
         </ThemeProvider>
         </PersistGate>
       </Provider>

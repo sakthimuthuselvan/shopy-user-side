@@ -109,7 +109,7 @@ const Index = () => {
     return (
         <div className='bg-grey'>
             <div className='px-3 mt-3'>
-                <h3 className='title pt-3 pb-2'>Most Buying Products</h3>
+                <Typography variant='subtitle1' className='fw-bold pt-3 pb-2'>Most Buying Products</Typography>
                 <div>
                     <div className='row p-0'>
                         {productList.map((item) => {
@@ -128,10 +128,10 @@ const Index = () => {
                                         setStateAgainFun={setStateAgainFun}
                                         whishListBtnCallBack={whishListBtnCallBack}
                                     />
-                                   
+
                                     <div>
                                         {
-                                            
+
                                         }
                                     </div>
                                     {/* <div className=' img-card p-0 pt-2'>
